@@ -7,7 +7,7 @@ class Waveform {
         this.btnGroup.addEventListener('click', (e) => this.selectWaveform(e.target.id));
     }
     selectWaveform(waveformId){
-        this.oscType = waveformId
+        this.oscType = waveformId;
     }
 }
 

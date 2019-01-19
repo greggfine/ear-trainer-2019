@@ -132,7 +132,7 @@ function () {
   function Sound() {
     var freq = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1000;
     var gainVal = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.2;
-    var oscType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'sawtooth';
+    var oscType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'sine';
 
     _classCallCheck(this, Sound);
 
@@ -248,6 +248,7 @@ function () {
 
     this.playBtn = document.querySelector('#play-btn');
     this.events();
+    this.sound = false;
   }
 
   _createClass(Play, [{
@@ -258,9 +259,15 @@ function () {
   }, {
     key: "playSound",
     value: function playSound() {
-      console.log(_Waveform.default);
-      var sound = new _Sound.default(2000, 0.5, _Waveform.default.oscType);
-      sound.init();
+      if (!this.sound) {
+        this.sound = new _Sound.default(2000, 0.5, _Waveform.default.oscType);
+        this.sound.init();
+        this.textContent = 'Stop';
+      } else {
+        this.sound.stopSound();
+        this.sound = false;
+        this.textContent = 'Play';
+      }
     }
   }]);
 

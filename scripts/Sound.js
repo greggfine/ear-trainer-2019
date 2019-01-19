@@ -1,4 +1,3 @@
-
 var audioCtx = new AudioContext();
 
 class Handler { 
@@ -9,11 +8,11 @@ class Handler {
 }
 
 class Sound {
-    constructor(freq=1000, gainVal=0.2, oscType='sawtooth'){
+    constructor(freq=1000, gainVal=0.2, oscType='sine'){
         this.freq = freq;
         this.gainVal = gainVal;
         this.oscType = oscType;
-        this.gainSlider = new Handler()
+        this.gainSlider = new Handler();
     }
 
     init(){
