@@ -1,33 +1,29 @@
 var audioCtx = new AudioContext();
-
-class GainSlider { 
-    constructor(){
-        this.range = document.querySelector('#gain-slider');
-    }
-}
+import GainSlider from './GainSlider';
 
 class Sound {
-    constructor(freq=1000, gainVal=0.2, oscType='sine'){
+    constructor(freq=440.0, gainVal=0.2, oscType='sine', offset=0){
         this.freq = freq;
         this.gainVal = gainVal;
         this.oscType = oscType;
-        this.gainSlider = new GainSlider();
+        this.offset = offset;
     }
 
     init(){
         this.osc = audioCtx.createOscillator();
         this.amp = audioCtx.createGain();
         this.osc.type = this.oscType;
+        this.osc.frequency.value = this.freq;
         this.osc.connect(this.amp);
         this.amp.connect(audioCtx.destination);
         this.timer = setInterval(() => {
-            this.amp.gain.value = this.gainSlider.range.value;
+            this.amp.gain.value = GainSlider.range.value;
         })
         this.playSound();
     }
 
     playSound(){
-        this.osc.start(audioCtx.currentTime);
+        this.osc.start(audioCtx.currentTime + this.offset);
     }
 
     stopSound(){

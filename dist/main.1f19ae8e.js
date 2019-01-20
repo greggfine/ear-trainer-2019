@@ -104,7 +104,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({"scripts/Sound.js":[function(require,module,exports) {
+})({"scripts/GainSlider.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -112,13 +112,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var audioCtx = new AudioContext();
 
 var GainSlider = function GainSlider() {
   _classCallCheck(this, GainSlider);
@@ -126,20 +120,44 @@ var GainSlider = function GainSlider() {
   this.range = document.querySelector('#gain-slider');
 };
 
+var _default = new GainSlider();
+
+exports.default = _default;
+},{}],"scripts/Sound.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _GainSlider = _interopRequireDefault(require("./GainSlider"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var audioCtx = new AudioContext();
+
 var Sound =
 /*#__PURE__*/
 function () {
   function Sound() {
-    var freq = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1000;
+    var freq = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 440.0;
     var gainVal = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.2;
     var oscType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'sine';
+    var offset = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 
     _classCallCheck(this, Sound);
 
     this.freq = freq;
     this.gainVal = gainVal;
     this.oscType = oscType;
-    this.gainSlider = new GainSlider();
+    this.offset = offset;
   }
 
   _createClass(Sound, [{
@@ -150,17 +168,18 @@ function () {
       this.osc = audioCtx.createOscillator();
       this.amp = audioCtx.createGain();
       this.osc.type = this.oscType;
+      this.osc.frequency.value = this.freq;
       this.osc.connect(this.amp);
       this.amp.connect(audioCtx.destination);
       this.timer = setInterval(function () {
-        _this.amp.gain.value = _this.gainSlider.range.value;
+        _this.amp.gain.value = _GainSlider.default.range.value;
       });
       this.playSound();
     }
   }, {
     key: "playSound",
     value: function playSound() {
-      this.osc.start(audioCtx.currentTime);
+      this.osc.start(audioCtx.currentTime + this.offset);
     }
   }, {
     key: "stopSound",
@@ -175,7 +194,7 @@ function () {
 
 var _default = Sound;
 exports.default = _default;
-},{}],"scripts/Waveform.js":[function(require,module,exports) {
+},{"./GainSlider":"scripts/GainSlider.js"}],"scripts/Waveform.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -221,6 +240,52 @@ function () {
 var _default = new Waveform();
 
 exports.default = _default;
+},{}],"scripts/StartingFreq.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var StartingFreq =
+/*#__PURE__*/
+function () {
+  function StartingFreq() {
+    _classCallCheck(this, StartingFreq);
+
+    this.startingFreqSelector = document.querySelector('#starting-freq-selector');
+    this.events();
+  }
+
+  _createClass(StartingFreq, [{
+    key: "events",
+    value: function events() {
+      var _this = this;
+
+      this.startingFreqSelector.addEventListener('change', function (e) {
+        return _this.setStartingFreq(e.target.value);
+      });
+    }
+  }, {
+    key: "setStartingFreq",
+    value: function setStartingFreq(startingFreqVal) {
+      this.startingFreq = startingFreqVal;
+    }
+  }]);
+
+  return StartingFreq;
+}();
+
+var _default = new StartingFreq();
+
+exports.default = _default;
 },{}],"scripts/Play.js":[function(require,module,exports) {
 "use strict";
 
@@ -233,6 +298,8 @@ var _Sound = _interopRequireDefault(require("./Sound"));
 
 var _Waveform = _interopRequireDefault(require("./Waveform"));
 
+var _StartingFreq = _interopRequireDefault(require("./StartingFreq"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -244,30 +311,37 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Play =
 /*#__PURE__*/
 function () {
-  function Play() {
+  function Play(offset) {
     _classCallCheck(this, Play);
 
     this.playBtn = document.querySelector('#play-btn');
     this.events();
     this.sound = false;
+    this.offset = offset;
   }
 
   _createClass(Play, [{
     key: "events",
     value: function events() {
-      this.playBtn.addEventListener('click', this.playSound);
+      var _this = this;
+
+      this.playBtn.addEventListener('click', function () {
+        return _this.playSound(_this.offset);
+      });
     }
   }, {
     key: "playSound",
     value: function playSound() {
       if (!this.sound) {
-        this.sound = new _Sound.default(2000, 0.5, _Waveform.default.oscType);
+        this.sound = new _Sound.default(_StartingFreq.default.startingFreq, 0.5, _Waveform.default.oscType, this.offset);
         this.sound.init();
-        this.textContent = 'Stop';
+        this.playBtn.textContent = 'Stop';
+        this.playBtn.classList.toggle('btn-danger');
       } else {
         this.sound.stopSound();
         this.sound = false;
-        this.textContent = 'Play';
+        this.playBtn.textContent = 'Play';
+        this.playBtn.classList.toggle('btn-danger');
       }
     }
   }]);
@@ -277,14 +351,14 @@ function () {
 
 var _default = Play;
 exports.default = _default;
-},{"./Sound":"scripts/Sound.js","./Waveform":"scripts/Waveform.js"}],"main.js":[function(require,module,exports) {
+},{"./Sound":"scripts/Sound.js","./Waveform":"scripts/Waveform.js","./StartingFreq":"scripts/StartingFreq.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 var _Play = _interopRequireDefault(require("./scripts/Play"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var playBtn = new _Play.default();
+var play = new _Play.default(0); // var play = new Play(1);
 },{"./scripts/Play":"scripts/Play.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
