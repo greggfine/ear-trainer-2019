@@ -194,117 +194,7 @@ function () {
 
 var _default = Sound;
 exports.default = _default;
-},{"./GainSlider":"scripts/GainSlider.js"}],"scripts/StartingFreq.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var StartingFreq =
-/*#__PURE__*/
-function () {
-  function StartingFreq() {
-    _classCallCheck(this, StartingFreq);
-
-    this.startingFreqSelector = document.querySelector('#starting-freq-selector');
-    this.events();
-  }
-
-  _createClass(StartingFreq, [{
-    key: "events",
-    value: function events() {
-      var _this = this;
-
-      this.startingFreqSelector.addEventListener('change', function (e) {
-        return _this.setStartingFreq(e.target.value);
-      });
-    }
-  }, {
-    key: "setStartingFreq",
-    value: function setStartingFreq(startingFreqVal) {
-      this.startingFreq = startingFreqVal;
-    }
-  }]);
-
-  return StartingFreq;
-}();
-
-var _default = new StartingFreq();
-
-exports.default = _default;
-},{}],"scripts/Play.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _Sound = _interopRequireDefault(require("./Sound"));
-
-var _StartingFreq = _interopRequireDefault(require("./StartingFreq"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var Play =
-/*#__PURE__*/
-function () {
-  function Play(wave, offset) {
-    _classCallCheck(this, Play);
-
-    this.playBtn = document.querySelector('#play-btn');
-    this.events();
-    this.sound = false;
-    this.wave = wave;
-    this.offset = offset;
-  }
-
-  _createClass(Play, [{
-    key: "events",
-    value: function events() {
-      var _this = this;
-
-      this.playBtn.addEventListener('click', function () {
-        return _this.playSound(_this.offset);
-      });
-    }
-  }, {
-    key: "playSound",
-    value: function playSound() {
-      if (!this.sound) {
-        this.sound = new _Sound.default(_StartingFreq.default.startingFreq, 0.5, this.wave, this.offset);
-        this.sound.init();
-        this.playBtn.textContent = 'Stop';
-        this.playBtn.classList.toggle('btn-danger');
-      } else {
-        this.sound.stopSound();
-        this.sound = false;
-        this.playBtn.textContent = 'Play';
-        this.playBtn.classList.toggle('btn-danger');
-      }
-    }
-  }]);
-
-  return Play;
-}();
-
-var _default = Play;
-exports.default = _default;
-},{"./Sound":"scripts/Sound.js","./StartingFreq":"scripts/StartingFreq.js"}],"scripts/Waveform.js":[function(require,module,exports) {
+},{"./GainSlider":"scripts/GainSlider.js"}],"scripts/Waveform.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -347,29 +237,117 @@ function () {
   return Waveform;
 }();
 
-var _default = Waveform; // export default new Waveform();
+var _default = new Waveform();
 
 exports.default = _default;
-},{}],"main.js":[function(require,module,exports) {
+},{}],"scripts/FrequencySelector.js":[function(require,module,exports) {
 "use strict";
 
-var _Play = _interopRequireDefault(require("./scripts/Play"));
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
 
-var _Waveform = _interopRequireDefault(require("./scripts/Waveform"));
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var FrequencySelector =
+/*#__PURE__*/
+function () {
+  function FrequencySelector() {
+    _classCallCheck(this, FrequencySelector);
+
+    this.startingFreqSelector = document.querySelector('#starting-freq-selector');
+    this.events();
+  }
+
+  _createClass(FrequencySelector, [{
+    key: "events",
+    value: function events() {
+      var _this = this;
+
+      this.startingFreqSelector.addEventListener('change', function (e) {
+        return _this.setStartingFreq(e.target.value);
+      });
+    }
+  }, {
+    key: "setStartingFreq",
+    value: function setStartingFreq(startingFreqVal) {
+      this.freq = startingFreqVal;
+    }
+  }]);
+
+  return FrequencySelector;
+}();
+
+var _default = new FrequencySelector();
+
+exports.default = _default;
+},{}],"scripts/Play.js":[function(require,module,exports) {
+"use strict";
+
+var _Sound = _interopRequireDefault(require("./Sound"));
+
+var _Waveform = _interopRequireDefault(require("./Waveform"));
+
+var _FrequencySelector = _interopRequireDefault(require("./FrequencySelector"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// var wave = new Waveform();
-// wave = wave.oscType;
-function player() {
-  var wave = new _Waveform.default();
-  wave = wave.oscType;
-  console.log(wave);
-  new _Play.default(wave, 0);
-}
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-player();
-},{"./scripts/Play":"scripts/Play.js","./scripts/Waveform":"scripts/Waveform.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Play =
+/*#__PURE__*/
+function () {
+  function Play(startingFreq, waveform, offset) {
+    _classCallCheck(this, Play);
+
+    this.playBtn = document.querySelector('#play-btn');
+    this.events();
+    this.sound = false;
+    this.initialFreq = startingFreq;
+    this.waveform = waveform;
+    this.offset = offset;
+  }
+
+  _createClass(Play, [{
+    key: "events",
+    value: function events() {
+      var _this = this;
+
+      this.playBtn.addEventListener('click', function () {
+        return _this.playSound();
+      });
+    }
+  }, {
+    key: "playSound",
+    value: function playSound() {
+      if (!this.sound) {
+        this.sound = new _Sound.default(this.initialFreq.freq, 0.5, this.waveform.oscType, this.offset);
+        this.sound.init();
+        this.playBtn.textContent = 'Stop';
+        this.playBtn.classList.toggle('btn-danger');
+      } else {
+        this.sound.stopSound();
+        this.sound = false;
+        this.playBtn.textContent = 'Play';
+        this.playBtn.classList.toggle('btn-danger');
+      }
+    }
+  }]);
+
+  return Play;
+}();
+
+new Play(_FrequencySelector.default, _Waveform.default, 0); // new Play('sawtooth', 2);
+},{"./Sound":"scripts/Sound.js","./Waveform":"scripts/Waveform.js","./FrequencySelector":"scripts/FrequencySelector.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -396,7 +374,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63312" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63861" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
@@ -538,5 +516,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","main.js"], null)
-//# sourceMappingURL=/main.1f19ae8e.map
+},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","scripts/Play.js"], null)
+//# sourceMappingURL=/Play.2d67a94b.map

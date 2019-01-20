@@ -1,4 +1,4 @@
-class StartingFreq {
+class FrequencySelector {
     constructor(){
         this.startingFreqSelector = document.querySelector('#starting-freq-selector');
         this.events();
@@ -7,8 +7,8 @@ class StartingFreq {
         this.startingFreqSelector.addEventListener('change', (e) => this.setStartingFreq(e.target.value))
     }
     setStartingFreq(startingFreqVal){
-        this.startingFreq = startingFreqVal;
+        this.freq = startingFreqVal;
     }
 }
 
-export default new StartingFreq();
+export default new FrequencySelector();

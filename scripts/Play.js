@@ -1,20 +1,22 @@
 import Sound from './Sound';
 import Waveform from './Waveform';  
-import StartingFreq from './StartingFreq';  
+import FrequencySelector from './FrequencySelector';  
 
 class Play {
-    constructor(offset) {
+    constructor(startingFreq, waveform, offset) {
         this.playBtn = document.querySelector('#play-btn');
         this.events();
         this.sound = false;
+        this.initialFreq = startingFreq;
+        this.waveform = waveform;
         this.offset = offset;
     }
     events() {
-        this.playBtn.addEventListener('click', () => this.playSound(this.offset));
+        this.playBtn.addEventListener('click', () => this.playSound());
     }
     playSound() {
         if(!this.sound){
-            this.sound = new Sound(StartingFreq.startingFreq, 0.5, Waveform.oscType, this.offset);
+            this.sound = new Sound(this.initialFreq.freq, 0.5, this.waveform.oscType, this.offset);
             this.sound.init();
             this.playBtn.textContent = 'Stop';
             this.playBtn.classList.toggle('btn-danger');
@@ -27,4 +29,5 @@ class Play {
     }
 }
 
-export default Play;
+new Play(FrequencySelector, Waveform, 0);
+// new Play('sawtooth', 2);

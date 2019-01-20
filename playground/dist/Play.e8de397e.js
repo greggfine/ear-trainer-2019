@@ -104,37 +104,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({"scripts/GainSlider.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var GainSlider = function GainSlider() {
-  _classCallCheck(this, GainSlider);
-
-  this.range = document.querySelector('#gain-slider');
-};
-
-var _default = new GainSlider();
-
-exports.default = _default;
-},{}],"scripts/Sound.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _GainSlider = _interopRequireDefault(require("./GainSlider"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+})({"Play.js":[function(require,module,exports) {
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -142,181 +112,6 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var audioCtx = new AudioContext();
-
-var Sound =
-/*#__PURE__*/
-function () {
-  function Sound() {
-    var freq = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 440.0;
-    var gainVal = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.2;
-    var oscType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'sine';
-    var offset = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
-
-    _classCallCheck(this, Sound);
-
-    this.freq = freq;
-    this.gainVal = gainVal;
-    this.oscType = oscType;
-    this.offset = offset;
-  }
-
-  _createClass(Sound, [{
-    key: "init",
-    value: function init() {
-      var _this = this;
-
-      this.osc = audioCtx.createOscillator();
-      this.amp = audioCtx.createGain();
-      this.osc.type = this.oscType;
-      this.osc.frequency.value = this.freq;
-      this.osc.connect(this.amp);
-      this.amp.connect(audioCtx.destination);
-      this.timer = setInterval(function () {
-        _this.amp.gain.value = _GainSlider.default.range.value;
-      });
-      this.playSound();
-    }
-  }, {
-    key: "playSound",
-    value: function playSound() {
-      this.osc.start(audioCtx.currentTime + this.offset);
-    }
-  }, {
-    key: "stopSound",
-    value: function stopSound() {
-      this.osc.stop(audioCtx.currentTime);
-      clearInterval(this.timer);
-    }
-  }]);
-
-  return Sound;
-}();
-
-var _default = Sound;
-exports.default = _default;
-},{"./GainSlider":"scripts/GainSlider.js"}],"scripts/StartingFreq.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var StartingFreq =
-/*#__PURE__*/
-function () {
-  function StartingFreq() {
-    _classCallCheck(this, StartingFreq);
-
-    this.startingFreqSelector = document.querySelector('#starting-freq-selector');
-    this.events();
-  }
-
-  _createClass(StartingFreq, [{
-    key: "events",
-    value: function events() {
-      var _this = this;
-
-      this.startingFreqSelector.addEventListener('change', function (e) {
-        return _this.setStartingFreq(e.target.value);
-      });
-    }
-  }, {
-    key: "setStartingFreq",
-    value: function setStartingFreq(startingFreqVal) {
-      this.startingFreq = startingFreqVal;
-    }
-  }]);
-
-  return StartingFreq;
-}();
-
-var _default = new StartingFreq();
-
-exports.default = _default;
-},{}],"scripts/Play.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _Sound = _interopRequireDefault(require("./Sound"));
-
-var _StartingFreq = _interopRequireDefault(require("./StartingFreq"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var Play =
-/*#__PURE__*/
-function () {
-  function Play(wave, offset) {
-    _classCallCheck(this, Play);
-
-    this.playBtn = document.querySelector('#play-btn');
-    this.events();
-    this.sound = false;
-    this.wave = wave;
-    this.offset = offset;
-  }
-
-  _createClass(Play, [{
-    key: "events",
-    value: function events() {
-      var _this = this;
-
-      this.playBtn.addEventListener('click', function () {
-        return _this.playSound(_this.offset);
-      });
-    }
-  }, {
-    key: "playSound",
-    value: function playSound() {
-      if (!this.sound) {
-        this.sound = new _Sound.default(_StartingFreq.default.startingFreq, 0.5, this.wave, this.offset);
-        this.sound.init();
-        this.playBtn.textContent = 'Stop';
-        this.playBtn.classList.toggle('btn-danger');
-      } else {
-        this.sound.stopSound();
-        this.sound = false;
-        this.playBtn.textContent = 'Play';
-        this.playBtn.classList.toggle('btn-danger');
-      }
-    }
-  }]);
-
-  return Play;
-}();
-
-var _default = Play;
-exports.default = _default;
-},{"./Sound":"scripts/Sound.js","./StartingFreq":"scripts/StartingFreq.js"}],"scripts/Waveform.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var Waveform =
 /*#__PURE__*/
@@ -347,29 +142,97 @@ function () {
   return Waveform;
 }();
 
-var _default = Waveform; // export default new Waveform();
+var waveform = new Waveform();
 
-exports.default = _default;
-},{}],"main.js":[function(require,module,exports) {
-"use strict";
+var Sound =
+/*#__PURE__*/
+function () {
+  function Sound() {
+    var freq = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 440.0;
+    var gainVal = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.2;
+    var oscType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'sine';
+    var offset = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 
-var _Play = _interopRequireDefault(require("./scripts/Play"));
+    _classCallCheck(this, Sound);
 
-var _Waveform = _interopRequireDefault(require("./scripts/Waveform"));
+    this.freq = freq;
+    this.gainVal = gainVal;
+    this.oscType = oscType;
+    this.offset = offset;
+  }
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  _createClass(Sound, [{
+    key: "init",
+    value: function init() {
+      this.osc = audioCtx.createOscillator();
+      this.amp = audioCtx.createGain();
+      this.osc.type = this.oscType;
+      this.osc.frequency.value = this.freq;
+      this.osc.connect(this.amp);
+      this.amp.connect(audioCtx.destination);
+      this.playSound();
+    }
+  }, {
+    key: "playSound",
+    value: function playSound() {
+      this.osc.start(audioCtx.currentTime + this.offset);
+    }
+  }, {
+    key: "stopSound",
+    value: function stopSound() {
+      this.osc.stop(audioCtx.currentTime);
+      clearInterval(this.timer);
+    }
+  }]);
 
-// var wave = new Waveform();
-// wave = wave.oscType;
-function player() {
-  var wave = new _Waveform.default();
-  wave = wave.oscType;
-  console.log(wave);
-  new _Play.default(wave, 0);
-}
+  return Sound;
+}();
 
-player();
-},{"./scripts/Play":"scripts/Play.js","./scripts/Waveform":"scripts/Waveform.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+var Play =
+/*#__PURE__*/
+function () {
+  function Play(oscInput, offset) {
+    _classCallCheck(this, Play);
+
+    this.playBtn = document.querySelector('#play-btn');
+    this.events();
+    this.sound = false;
+    this.osc = oscInput;
+    this.offset = offset;
+  }
+
+  _createClass(Play, [{
+    key: "events",
+    value: function events() {
+      var _this2 = this;
+
+      this.playBtn.addEventListener('click', function () {
+        return _this2.playSound(_this2.osc, _this2.offset);
+      });
+    }
+  }, {
+    key: "playSound",
+    value: function playSound() {
+      if (!this.sound) {
+        console.log(this.osc.oscType);
+        this.sound = new Sound(400, 0.5, this.osc.oscType, this.offset);
+        this.sound.init();
+        this.playBtn.textContent = 'Stop';
+        this.playBtn.classList.toggle('btn-danger');
+      } else {
+        this.sound.stopSound();
+        this.sound = false;
+        this.playBtn.textContent = 'Play';
+        this.playBtn.classList.toggle('btn-danger');
+      }
+    }
+  }]);
+
+  return Play;
+}();
+
+new Play(waveform, 0); // new Play(0);
+},{}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -396,7 +259,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63312" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61280" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
@@ -538,5 +401,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","main.js"], null)
-//# sourceMappingURL=/main.1f19ae8e.map
+},{}]},{},["../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","Play.js"], null)
+//# sourceMappingURL=/Play.e8de397e.map
