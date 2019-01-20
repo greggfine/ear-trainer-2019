@@ -1,6 +1,21 @@
-import Play from './scripts/Play';
+// import Play from './scripts/Play';
+// import Waveform from './scripts/Waveform';
 
-var play = new Play(0);
-// var play = new Play(1);
+
+// var wave = new Waveform();
+// wave = wave.oscType;
+
+
+
+// function player(){
+//     var wave = new Waveform();
+//     wave = wave.oscType;
+//     console.log(wave)
+//     new Play(wave, 0);
+// }
+
+// player()
+
+
 
 

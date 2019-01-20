@@ -104,74 +104,135 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
-var bundleURL = null;
+})({"Play.js":[function(require,module,exports) {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function getBundleURLCached() {
-  if (!bundleURL) {
-    bundleURL = getBundleURL();
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var audioCtx = new AudioContext();
+
+var Waveform =
+/*#__PURE__*/
+function () {
+  function Waveform() {
+    _classCallCheck(this, Waveform);
+
+    this.btnGroup = document.querySelector('#btn-group');
+    this.events();
   }
 
-  return bundleURL;
-}
+  _createClass(Waveform, [{
+    key: "events",
+    value: function events() {
+      var _this = this;
 
-function getBundleURL() {
-  // Attempt to find the URL of the current script and use that as the base URL
-  try {
-    throw new Error();
-  } catch (err) {
-    var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
-
-    if (matches) {
-      return getBaseURL(matches[0]);
+      this.btnGroup.addEventListener('click', function (e) {
+        return _this.selectWaveform(e.target.id);
+      });
     }
+  }, {
+    key: "selectWaveform",
+    value: function selectWaveform(waveformId) {
+      this.oscType = waveformId;
+    }
+  }]);
+
+  return Waveform;
+}();
+
+var waveform = new Waveform();
+
+var Sound =
+/*#__PURE__*/
+function () {
+  function Sound() {
+    var freq = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 440.0;
+    var gainVal = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.2;
+    var oscType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'sine';
+    var offset = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+
+    _classCallCheck(this, Sound);
+
+    this.freq = freq;
+    this.gainVal = gainVal;
+    this.oscType = oscType;
+    this.offset = offset;
   }
 
-  return '/';
-}
+  _createClass(Sound, [{
+    key: "init",
+    value: function init() {
+      this.osc = audioCtx.createOscillator();
+      this.amp = audioCtx.createGain();
+      this.osc.type = this.oscType;
+      this.osc.frequency.value = this.freq;
+      this.osc.connect(this.amp);
+      this.amp.connect(audioCtx.destination);
+      this.playSound();
+    }
+  }, {
+    key: "playSound",
+    value: function playSound() {
+      this.osc.start(audioCtx.currentTime + this.offset);
+    }
+  }, {
+    key: "stopSound",
+    value: function stopSound() {
+      this.osc.stop(audioCtx.currentTime);
+      clearInterval(this.timer);
+    }
+  }]);
 
-function getBaseURL(url) {
-  return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
-}
+  return Sound;
+}();
 
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-},{}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
-var bundle = require('./bundle-url');
+var Play =
+/*#__PURE__*/
+function () {
+  function Play(oscInput, offset) {
+    _classCallCheck(this, Play);
 
-function updateLink(link) {
-  var newLink = link.cloneNode();
-
-  newLink.onload = function () {
-    link.remove();
-  };
-
-  newLink.href = link.href.split('?')[0] + '?' + Date.now();
-  link.parentNode.insertBefore(newLink, link.nextSibling);
-}
-
-var cssTimeout = null;
-
-function reloadCSS() {
-  if (cssTimeout) {
-    return;
+    this.playBtn = document.querySelector('#play-btn');
+    this.events();
+    this.sound = false;
+    this.osc = oscInput;
+    this.offset = offset;
   }
 
-  cssTimeout = setTimeout(function () {
-    var links = document.querySelectorAll('link[rel="stylesheet"]');
+  _createClass(Play, [{
+    key: "events",
+    value: function events() {
+      var _this2 = this;
 
-    for (var i = 0; i < links.length; i++) {
-      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
-        updateLink(links[i]);
+      this.playBtn.addEventListener('click', function () {
+        return _this2.playSound(_this2.osc, _this2.offset);
+      });
+    }
+  }, {
+    key: "playSound",
+    value: function playSound() {
+      if (!this.sound) {
+        console.log(this.osc.oscType);
+        this.sound = new Sound(400, 0.5, this.osc.oscType, this.offset);
+        this.sound.init();
+        this.playBtn.textContent = 'Stop';
+        this.playBtn.classList.toggle('btn-danger');
+      } else {
+        this.sound.stopSound();
+        this.sound = false;
+        this.playBtn.textContent = 'Play';
+        this.playBtn.classList.toggle('btn-danger');
       }
     }
+  }]);
 
-    cssTimeout = null;
-  }, 50);
-}
+  return Play;
+}();
 
-module.exports = reloadCSS;
-},{"./bundle-url":"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+new Play(waveform, 0); // new Play(0);
+},{}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -198,7 +259,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52116" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61280" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
@@ -340,4 +401,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
+},{}]},{},["../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","Play.js"], null)
+//# sourceMappingURL=/Play.e8de397e.map

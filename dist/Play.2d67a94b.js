@@ -151,6 +151,7 @@ function () {
     var gainVal = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.2;
     var oscType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'sine';
     var offset = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+    var stopTime = arguments.length > 4 ? arguments[4] : undefined;
 
     _classCallCheck(this, Sound);
 
@@ -158,6 +159,7 @@ function () {
     this.gainVal = gainVal;
     this.oscType = oscType;
     this.offset = offset;
+    this.stopTime = stopTime;
   }
 
   _createClass(Sound, [{
@@ -173,7 +175,7 @@ function () {
       this.amp.connect(audioCtx.destination);
       this.timer = setInterval(function () {
         _this.amp.gain.value = _GainSlider.default.range.value;
-      });
+      }, 50);
       this.playSound();
     }
   }, {
@@ -184,7 +186,7 @@ function () {
   }, {
     key: "stopSound",
     value: function stopSound() {
-      this.osc.stop(audioCtx.currentTime);
+      this.osc.stop(audioCtx.currentTime + this.stopTime);
       clearInterval(this.timer);
     }
   }]);
@@ -194,117 +196,7 @@ function () {
 
 var _default = Sound;
 exports.default = _default;
-},{"./GainSlider":"scripts/GainSlider.js"}],"scripts/StartingFreq.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var StartingFreq =
-/*#__PURE__*/
-function () {
-  function StartingFreq() {
-    _classCallCheck(this, StartingFreq);
-
-    this.startingFreqSelector = document.querySelector('#starting-freq-selector');
-    this.events();
-  }
-
-  _createClass(StartingFreq, [{
-    key: "events",
-    value: function events() {
-      var _this = this;
-
-      this.startingFreqSelector.addEventListener('change', function (e) {
-        return _this.setStartingFreq(e.target.value);
-      });
-    }
-  }, {
-    key: "setStartingFreq",
-    value: function setStartingFreq(startingFreqVal) {
-      this.startingFreq = startingFreqVal;
-    }
-  }]);
-
-  return StartingFreq;
-}();
-
-var _default = new StartingFreq();
-
-exports.default = _default;
-},{}],"scripts/Play.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _Sound = _interopRequireDefault(require("./Sound"));
-
-var _StartingFreq = _interopRequireDefault(require("./StartingFreq"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var Play =
-/*#__PURE__*/
-function () {
-  function Play(wave, offset) {
-    _classCallCheck(this, Play);
-
-    this.playBtn = document.querySelector('#play-btn');
-    this.events();
-    this.sound = false;
-    this.wave = wave;
-    this.offset = offset;
-  }
-
-  _createClass(Play, [{
-    key: "events",
-    value: function events() {
-      var _this = this;
-
-      this.playBtn.addEventListener('click', function () {
-        return _this.playSound(_this.offset);
-      });
-    }
-  }, {
-    key: "playSound",
-    value: function playSound() {
-      if (!this.sound) {
-        this.sound = new _Sound.default(_StartingFreq.default.startingFreq, 0.5, this.wave, this.offset);
-        this.sound.init();
-        this.playBtn.textContent = 'Stop';
-        this.playBtn.classList.toggle('btn-danger');
-      } else {
-        this.sound.stopSound();
-        this.sound = false;
-        this.playBtn.textContent = 'Play';
-        this.playBtn.classList.toggle('btn-danger');
-      }
-    }
-  }]);
-
-  return Play;
-}();
-
-var _default = Play;
-exports.default = _default;
-},{"./Sound":"scripts/Sound.js","./StartingFreq":"scripts/StartingFreq.js"}],"scripts/Waveform.js":[function(require,module,exports) {
+},{"./GainSlider":"scripts/GainSlider.js"}],"scripts/Waveform.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -347,29 +239,222 @@ function () {
   return Waveform;
 }();
 
-var _default = Waveform; // export default new Waveform();
+var _default = new Waveform();
 
 exports.default = _default;
-},{}],"main.js":[function(require,module,exports) {
+},{}],"scripts/FrequencySelector.js":[function(require,module,exports) {
 "use strict";
 
-var _Play = _interopRequireDefault(require("./scripts/Play"));
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
 
-var _Waveform = _interopRequireDefault(require("./scripts/Waveform"));
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var FrequencySelector =
+/*#__PURE__*/
+function () {
+  function FrequencySelector() {
+    _classCallCheck(this, FrequencySelector);
+
+    this.startingFreqSelector = document.querySelector('#starting-freq-selector');
+    this.events();
+  }
+
+  _createClass(FrequencySelector, [{
+    key: "events",
+    value: function events() {
+      var _this = this;
+
+      this.startingFreqSelector.addEventListener('change', function (e) {
+        return _this.setStartingFreq(e.target.value);
+      });
+    }
+  }, {
+    key: "setStartingFreq",
+    value: function setStartingFreq(startingFreqVal) {
+      this.freq = startingFreqVal;
+    }
+  }]);
+
+  return FrequencySelector;
+}();
+
+var _default = new FrequencySelector();
+
+exports.default = _default;
+},{}],"FrequencyMap.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+// const frequencyMap = { 
+//     "c3": 130.81, 
+//     "d3": 146.83, 
+//     "e3": 164.81, 
+//     "f3": 174.61, 
+//     "g3": 196.0, 
+//     "a3": 220.0, 
+//     "b3": 246.94, 
+//     "c4": 261.63, 
+//     "c#4": 277.18, 
+//     "d4": 293.66, 
+//     "d#4": 311.13, 
+//     "e4": 329.63, 
+//     "f4": 349.23, 
+//     "f#4": 185.0, 
+//     "g4": 392.0, 
+//     "g#4": 207.65, 
+//     "a4": 440.0, 
+//     "a#4": 466.16, 
+//     "b4": 493.88, 
+//     "c5": 523.25 };
+// export default frequencyMap;
+var frequencyArr = [130.81, 146.83, 164.81, 174.61, 196.0, 220.0, 246.94, 261.63, 277.18, 293.66, 311.13, 329.63, 349.23, 185.0, 392.0, 207.65, 440.0, 466.16, 493.88, 523.25];
+var _default = frequencyArr;
+exports.default = _default;
+},{}],"scripts/RandomFrequency.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _FrequencyMap = _interopRequireDefault(require("../FrequencyMap"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// var wave = new Waveform();
-// wave = wave.oscType;
-function player() {
-  var wave = new _Waveform.default();
-  wave = wave.oscType;
-  console.log(wave);
-  new _Play.default(wave, 0);
-}
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-player();
-},{"./scripts/Play":"scripts/Play.js","./scripts/Waveform":"scripts/Waveform.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+var RandomFrequency = function RandomFrequency() {
+  _classCallCheck(this, RandomFrequency);
+
+  this.freq = _FrequencyMap.default[Math.floor(Math.random() * _FrequencyMap.default.length)];
+};
+
+var _default = RandomFrequency;
+exports.default = _default;
+},{"../FrequencyMap":"FrequencyMap.js"}],"scripts/Guesses.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _RandomFrequency = _interopRequireDefault(require("./RandomFrequency"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Guesses =
+/*#__PURE__*/
+function () {
+  function Guesses() {
+    _classCallCheck(this, Guesses);
+
+    this.guesses = document.querySelector('#guesses');
+    this.events();
+  }
+
+  _createClass(Guesses, [{
+    key: "events",
+    value: function events() {
+      var li = document.createElement('li');
+      li.textContent = 'yo';
+      li.className = 'list-group-item';
+      this.guesses.appendChild(li);
+    }
+  }]);
+
+  return Guesses;
+}();
+
+var _default = new Guesses();
+
+exports.default = _default;
+},{"./RandomFrequency":"scripts/RandomFrequency.js"}],"scripts/Play.js":[function(require,module,exports) {
+"use strict";
+
+var _Sound = _interopRequireDefault(require("./Sound"));
+
+var _Waveform = _interopRequireDefault(require("./Waveform"));
+
+var _FrequencySelector = _interopRequireDefault(require("./FrequencySelector"));
+
+var _RandomFrequency = _interopRequireDefault(require("./RandomFrequency"));
+
+var _Guesses = _interopRequireDefault(require("./Guesses"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Play =
+/*#__PURE__*/
+function () {
+  function Play(startingFreq, waveform, offset, RandomFreq) {
+    _classCallCheck(this, Play);
+
+    this.playBtn = document.querySelector('#play-btn');
+    this.events();
+    this.sound = false;
+    this.initialFreq = startingFreq;
+    this.waveform = waveform;
+    this.offset = offset;
+    this.randFreq = RandomFreq;
+  }
+
+  _createClass(Play, [{
+    key: "events",
+    value: function events() {
+      var _this = this;
+
+      this.playBtn.addEventListener('click', function () {
+        return _this.playSound();
+      });
+    }
+  }, {
+    key: "playSound",
+    value: function playSound() {
+      if (!this.sound) {
+        var randFreq = new this.randFreq();
+        this.sound = new _Sound.default(this.initialFreq.freq, 0.5, this.waveform.oscType, this.offset, 1);
+        this.sound.init();
+        this.sound.stopSound();
+        this.sound2 = new _Sound.default(randFreq.freq, 0.5, this.waveform.oscType, 2, 3);
+        this.sound2.init();
+        this.sound2.stopSound();
+        this.sound = false;
+        this.playBtn.textContent = 'Listen';
+        this.playBtn.classList.toggle('btn-danger');
+      }
+    }
+  }]);
+
+  return Play;
+}(); // 
+
+
+var play1 = new Play(_FrequencySelector.default, _Waveform.default, 0, _RandomFrequency.default);
+},{"./Sound":"scripts/Sound.js","./Waveform":"scripts/Waveform.js","./FrequencySelector":"scripts/FrequencySelector.js","./RandomFrequency":"scripts/RandomFrequency.js","./Guesses":"scripts/Guesses.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -538,5 +623,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","main.js"], null)
-//# sourceMappingURL=/main.1f19ae8e.map
+},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","scripts/Play.js"], null)
+//# sourceMappingURL=/Play.2d67a94b.map
