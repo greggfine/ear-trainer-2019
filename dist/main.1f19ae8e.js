@@ -120,8 +120,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var audioCtx = new AudioContext();
 
-var Handler = function Handler() {
-  _classCallCheck(this, Handler);
+var GainSlider = function GainSlider() {
+  _classCallCheck(this, GainSlider);
 
   this.range = document.querySelector('#gain-slider');
 };
@@ -139,7 +139,7 @@ function () {
     this.freq = freq;
     this.gainVal = gainVal;
     this.oscType = oscType;
-    this.gainSlider = new Handler();
+    this.gainSlider = new GainSlider();
   }
 
   _createClass(Sound, [{
@@ -152,7 +152,7 @@ function () {
       this.osc.type = this.oscType;
       this.osc.connect(this.amp);
       this.amp.connect(audioCtx.destination);
-      setInterval(function () {
+      this.timer = setInterval(function () {
         _this.amp.gain.value = _this.gainSlider.range.value;
       });
       this.playSound();
@@ -166,6 +166,7 @@ function () {
     key: "stopSound",
     value: function stopSound() {
       this.osc.stop(audioCtx.currentTime);
+      clearInterval(this.timer);
     }
   }]);
 

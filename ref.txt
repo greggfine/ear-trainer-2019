@@ -1,0 +1,8 @@
+Main --> Play
+    var playBtn = new Play();
+
+Play
+
+Sound
+
+Waveform

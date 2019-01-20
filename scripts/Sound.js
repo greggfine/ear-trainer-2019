@@ -1,10 +1,9 @@
 var audioCtx = new AudioContext();
 
-class Handler { 
+class GainSlider { 
     constructor(){
         this.range = document.querySelector('#gain-slider');
     }
-
 }
 
 class Sound {
@@ -12,7 +11,7 @@ class Sound {
         this.freq = freq;
         this.gainVal = gainVal;
         this.oscType = oscType;
-        this.gainSlider = new Handler();
+        this.gainSlider = new GainSlider();
     }
 
     init(){
@@ -21,7 +20,7 @@ class Sound {
         this.osc.type = this.oscType;
         this.osc.connect(this.amp);
         this.amp.connect(audioCtx.destination);
-        setInterval(() => {
+        this.timer = setInterval(() => {
             this.amp.gain.value = this.gainSlider.range.value;
         })
         this.playSound();
@@ -33,10 +32,8 @@ class Sound {
 
     stopSound(){
         this.osc.stop(audioCtx.currentTime);
+        clearInterval(this.timer)
     }
 }
 
 export default Sound;
-
-
-
