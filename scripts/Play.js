@@ -5,6 +5,7 @@ import RandomFreq from './RandomFrequency';
 import Guesses from './Guesses';
 
 
+
 class Play {
     constructor(startingFreq, waveform, offset, RandomFreq) {
         this.playBtn = document.querySelector('#play-btn');
