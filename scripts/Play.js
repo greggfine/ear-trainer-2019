@@ -25,7 +25,7 @@ class Play {
     }
     playSound() {
         if(!this.sound){
-        answerDisplay.textContent = ''
+        answerDisplay.textContent = '';
         var randFreq = new this.randFreq();
         var gainVal = new this.gainVal();
         var guesses = new Guesses(randFreq);
