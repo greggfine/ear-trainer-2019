@@ -103,23 +103,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({16:[function(require,module,exports) {
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var GainSlider = function GainSlider() {
-    _classCallCheck(this, GainSlider);
-
-    this.range = document.querySelector('#gain-slider');
-};
-
-exports.default = new GainSlider();
-},{}],10:[function(require,module,exports) {
+})({10:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -127,12 +111,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _GainSlider = require('./GainSlider');
-
-var _GainSlider2 = _interopRequireDefault(_GainSlider);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -158,17 +136,13 @@ var Sound = function () {
     _createClass(Sound, [{
         key: 'init',
         value: function init() {
-            var _this = this;
-
             this.osc = audioCtx.createOscillator();
             this.amp = audioCtx.createGain();
             this.osc.type = this.oscType;
             this.osc.frequency.value = this.freq;
+            this.amp.gain.value = this.gainVal;
             this.osc.connect(this.amp);
             this.amp.connect(audioCtx.destination);
-            this.timer = setInterval(function () {
-                _this.amp.gain.value = _GainSlider2.default.range.value;
-            }, 50);
             this.playSound();
         }
     }, {
@@ -180,7 +154,6 @@ var Sound = function () {
         key: 'stopSound',
         value: function stopSound() {
             this.osc.stop(audioCtx.currentTime + this.stopTime);
-            clearInterval(this.timer);
         }
     }]);
 
@@ -188,7 +161,7 @@ var Sound = function () {
 }();
 
 exports.default = Sound;
-},{"./GainSlider":16}],11:[function(require,module,exports) {
+},{}],11:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -270,7 +243,7 @@ exports.default = new FrequencySelector();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 // const frequencyMap = { 
 //     "c3": 130.81, 
@@ -296,7 +269,30 @@ Object.defineProperty(exports, "__esModule", {
 
 // export default frequencyMap;
 
-var frequencyArr = [130.81, 146.83, 164.81, 174.61, 196.0, 220.0, 246.94, 261.63, 277.18, 293.66, 311.13, 329.63, 349.23, 185.0, 392.0, 207.65, 440.0, 466.16, 493.88, 523.25];
+// const frequencyArr = [
+//     130.81, 
+//     146.83, 
+//     164.81, 
+//     174.61, 
+//     196.0, 
+//     220.0, 
+//     246.94, 
+//     261.63, 
+//      277.18, 
+//     293.66, 
+//      311.13, 
+//     329.63, 
+//     349.23, 
+//      185.0, 
+//     392.0, 
+//      207.65, 
+//     440.0, 
+//      466.16, 
+//     493.88, 
+//     523.25
+// ]
+
+var frequencyArr = [261.63, 293.66, 329.63, 349.23, 392.0, 440.0, 493.88, 523.25];
 
 exports.default = frequencyArr;
 },{}],15:[function(require,module,exports) {
@@ -328,8 +324,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _RandomFrequency = require('./RandomFrequency');
 
 var _RandomFrequency2 = _interopRequireDefault(_RandomFrequency);
@@ -338,29 +332,83 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Guesses = function () {
-    function Guesses() {
-        _classCallCheck(this, Guesses);
+var Guesses = function Guesses(randFreq) {
+    var _this = this;
 
-        this.guesses = document.querySelector('#guesses');
-        this.events();
+    _classCallCheck(this, Guesses);
+
+    this.guessBtns = document.querySelectorAll('.guess');
+    this.randFreq = randFreq;
+    var guessBtnArr = Array.from(this.guessBtns);
+    var correctAnswer = guessBtnArr.filter(function (guessBtn) {
+        return Number(guessBtn.dataset.freq) === _this.randFreq.freq;
+    });
+    this.correctAnswer = correctAnswer;
+    // console.log(this.correctAnswer)
+};
+
+exports.default = Guesses;
+},{"./RandomFrequency":15}],45:[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var crct;
+var answerDisplay = document.querySelector('#answer-display');
+
+var UserAnswer = function () {
+    function UserAnswer(correctAnswer) {
+        _classCallCheck(this, UserAnswer);
+
+        crct = correctAnswer;
+        this.btnGroup = document.querySelector('#guesses');
+        // this.btnGroup.removeEventListener('click', this.run);
+        this.answered();
     }
 
-    _createClass(Guesses, [{
-        key: 'events',
-        value: function events() {
-            var li = document.createElement('li');
-            li.textContent = 'yo';
-            li.className = 'list-group-item';
-            this.guesses.appendChild(li);
+    _createClass(UserAnswer, [{
+        key: 'answered',
+        value: function answered() {
+            this.btnGroup.addEventListener('click', this.run);
+        }
+    }, {
+        key: 'run',
+        value: function run(e) {
+            if (+e.target.dataset.freq === +crct[0].dataset.freq) {
+                answerDisplay.textContent = 'correct!';
+            } else {
+                answerDisplay.textContent = 'wrong!';
+            }
         }
     }]);
 
-    return Guesses;
+    return UserAnswer;
 }();
 
-exports.default = new Guesses();
-},{"./RandomFrequency":15}],6:[function(require,module,exports) {
+exports.default = UserAnswer;
+},{}],16:[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var GainSlider = function GainSlider() {
+    _classCallCheck(this, GainSlider);
+
+    this.range = document.querySelector('#gain-slider');
+};
+
+exports.default = GainSlider;
+},{}],6:[function(require,module,exports) {
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -385,21 +433,32 @@ var _Guesses = require('./Guesses');
 
 var _Guesses2 = _interopRequireDefault(_Guesses);
 
+var _UserAnswer = require('./UserAnswer');
+
+var _UserAnswer2 = _interopRequireDefault(_UserAnswer);
+
+var _GainSlider = require('./GainSlider');
+
+var _GainSlider2 = _interopRequireDefault(_GainSlider);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var answerDisplay = document.querySelector('#answer-display');
+
 var Play = function () {
-    function Play(startingFreq, waveform, offset, RandomFreq) {
+    function Play(startingFreq, waveform, offset, RandomFreq, GainSlider) {
         _classCallCheck(this, Play);
 
         this.playBtn = document.querySelector('#play-btn');
-        this.events();
         this.sound = false;
         this.initialFreq = startingFreq;
         this.waveform = waveform;
         this.offset = offset;
         this.randFreq = RandomFreq;
+        this.gainVal = GainSlider;
+        this.events();
     }
 
     _createClass(Play, [{
@@ -414,22 +473,31 @@ var Play = function () {
     }, {
         key: 'playSound',
         value: function playSound() {
+            var _this2 = this;
+
             if (!this.sound) {
-
+                answerDisplay.textContent = '';
                 var randFreq = new this.randFreq();
+                var gainVal = new this.gainVal();
+                var guesses = new _Guesses2.default(randFreq);
+                var userAnswer = new _UserAnswer2.default(guesses.correctAnswer);
 
-                this.sound = new _Sound2.default(this.initialFreq.freq, 0.5, this.waveform.oscType, this.offset, 1);
+                this.sound = new _Sound2.default(this.initialFreq.freq, gainVal.range.value, this.waveform.oscType, this.offset, 1);
                 this.sound.init();
                 this.sound.stopSound();
 
-                this.sound2 = new _Sound2.default(randFreq.freq, 0.5, this.waveform.oscType, 2, 3);
+                this.sound2 = new _Sound2.default(randFreq.freq, gainVal.range.value, this.waveform.oscType, 2, 3);
                 this.sound2.init();
                 this.sound2.stopSound();
 
-                this.sound = false;
-
-                this.playBtn.textContent = 'Listen';
+                this.playBtn.textContent = 'Listen...';
                 this.playBtn.classList.toggle('btn-danger');
+
+                setTimeout(function () {
+                    _this2.playBtn.textContent = 'Play';
+                    _this2.playBtn.classList.toggle('btn-danger');
+                    _this2.sound = false;
+                }, 4000);
             }
         }
     }]);
@@ -439,8 +507,8 @@ var Play = function () {
 
 // 
 
-var play1 = new Play(_FrequencySelector2.default, _Waveform2.default, 0, _RandomFrequency2.default);
-},{"./Sound":10,"./Waveform":11,"./FrequencySelector":12,"./RandomFrequency":15,"./Guesses":13}],44:[function(require,module,exports) {
+var play1 = new Play(_FrequencySelector2.default, _Waveform2.default, 0, _RandomFrequency2.default, _GainSlider2.default);
+},{"./Sound":10,"./Waveform":11,"./FrequencySelector":12,"./RandomFrequency":15,"./Guesses":13,"./UserAnswer":45,"./GainSlider":16}],44:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 

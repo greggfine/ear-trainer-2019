@@ -104,36 +104,13 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({"scripts/GainSlider.js":[function(require,module,exports) {
+})({"scripts/Sound.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var GainSlider = function GainSlider() {
-  _classCallCheck(this, GainSlider);
-
-  this.range = document.querySelector('#gain-slider');
-};
-
-var _default = new GainSlider();
-
-exports.default = _default;
-},{}],"scripts/Sound.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _GainSlider = _interopRequireDefault(require("./GainSlider"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -165,17 +142,13 @@ function () {
   _createClass(Sound, [{
     key: "init",
     value: function init() {
-      var _this = this;
-
       this.osc = audioCtx.createOscillator();
       this.amp = audioCtx.createGain();
       this.osc.type = this.oscType;
       this.osc.frequency.value = this.freq;
+      this.amp.gain.value = this.gainVal;
       this.osc.connect(this.amp);
       this.amp.connect(audioCtx.destination);
-      this.timer = setInterval(function () {
-        _this.amp.gain.value = _GainSlider.default.range.value;
-      }, 50);
       this.playSound();
     }
   }, {
@@ -187,7 +160,6 @@ function () {
     key: "stopSound",
     value: function stopSound() {
       this.osc.stop(audioCtx.currentTime + this.stopTime);
-      clearInterval(this.timer);
     }
   }]);
 
@@ -196,7 +168,7 @@ function () {
 
 var _default = Sound;
 exports.default = _default;
-},{"./GainSlider":"scripts/GainSlider.js"}],"scripts/Waveform.js":[function(require,module,exports) {
+},{}],"scripts/Waveform.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -317,7 +289,29 @@ exports.default = void 0;
 //     "b4": 493.88, 
 //     "c5": 523.25 };
 // export default frequencyMap;
-var frequencyArr = [130.81, 146.83, 164.81, 174.61, 196.0, 220.0, 246.94, 261.63, 277.18, 293.66, 311.13, 329.63, 349.23, 185.0, 392.0, 207.65, 440.0, 466.16, 493.88, 523.25];
+// const frequencyArr = [
+//     130.81, 
+//     146.83, 
+//     164.81, 
+//     174.61, 
+//     196.0, 
+//     220.0, 
+//     246.94, 
+//     261.63, 
+//      277.18, 
+//     293.66, 
+//      311.13, 
+//     329.63, 
+//     349.23, 
+//      185.0, 
+//     392.0, 
+//      207.65, 
+//     440.0, 
+//      466.16, 
+//     493.88, 
+//     523.25
+// ]
+var frequencyArr = [261.63, 293.66, 329.63, 349.23, 392.0, 440.0, 493.88, 523.25];
 var _default = frequencyArr;
 exports.default = _default;
 },{}],"scripts/RandomFrequency.js":[function(require,module,exports) {
@@ -356,37 +350,101 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var Guesses = function Guesses(randFreq) {
+  var _this = this;
+
+  _classCallCheck(this, Guesses);
+
+  this.guessBtns = document.querySelectorAll('.guess');
+  this.randFreq = randFreq;
+  var guessBtnArr = Array.from(this.guessBtns);
+  var correctAnswer = guessBtnArr.filter(function (guessBtn) {
+    return Number(guessBtn.dataset.freq) === _this.randFreq.freq;
+  });
+  this.correctAnswer = correctAnswer; // console.log(this.correctAnswer)
+};
+
+var _default = Guesses;
+exports.default = _default;
+},{"./RandomFrequency":"scripts/RandomFrequency.js"}],"scripts/UserAnswer.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var Guesses =
+var UserAnswer =
 /*#__PURE__*/
 function () {
-  function Guesses() {
-    _classCallCheck(this, Guesses);
+  function UserAnswer(correctAnswer) {
+    var _this = this;
 
-    this.guesses = document.querySelector('#guesses');
-    this.events();
+    _classCallCheck(this, UserAnswer);
+
+    this.correctAnswer = correctAnswer;
+    this.clicked;
+    this.answers = document.querySelectorAll('.guess');
+    this.answers.forEach(function (answer) {
+      answer.addEventListener('click', function (e) {
+        _this.clicked = +e.target.dataset.freq;
+
+        _this.answered();
+      });
+    });
   }
 
-  _createClass(Guesses, [{
-    key: "events",
-    value: function events() {
-      var li = document.createElement('li');
-      li.textContent = 'yo';
-      li.className = 'list-group-item';
-      this.guesses.appendChild(li);
+  _createClass(UserAnswer, [{
+    key: "answered",
+    value: function answered() {
+      //     console.log(+this.correctAnswer[0].dataset.freq)
+      //  console.log(this.clicked)
+      if (+this.correctAnswer[0].dataset.freq === this.clicked) {
+        console.log('correct');
+      } else {
+        console.log('wrong');
+      }
     }
   }]);
 
-  return Guesses;
-}();
+  return UserAnswer;
+}(); // var answers = document.querySelectorAll('.guess');
+// var clicked;
+// answers.forEach((answer) => {
+//     answer.addEventListener('click', (e) => {
+//             clicked = +e.target.dataset.freq
+//     })
+// })
+// console.log(clicked)
 
-var _default = new Guesses();
 
+var _default = UserAnswer;
 exports.default = _default;
-},{"./RandomFrequency":"scripts/RandomFrequency.js"}],"scripts/Play.js":[function(require,module,exports) {
+},{}],"scripts/GainSlider.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var GainSlider = function GainSlider() {
+  _classCallCheck(this, GainSlider);
+
+  this.range = document.querySelector('#gain-slider');
+};
+
+var _default = GainSlider;
+exports.default = _default;
+},{}],"scripts/Play.js":[function(require,module,exports) {
 "use strict";
 
 var _Sound = _interopRequireDefault(require("./Sound"));
@@ -399,6 +457,10 @@ var _RandomFrequency = _interopRequireDefault(require("./RandomFrequency"));
 
 var _Guesses = _interopRequireDefault(require("./Guesses"));
 
+var _UserAnswer = _interopRequireDefault(require("./UserAnswer"));
+
+var _GainSlider = _interopRequireDefault(require("./GainSlider"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -410,16 +472,17 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Play =
 /*#__PURE__*/
 function () {
-  function Play(startingFreq, waveform, offset, RandomFreq) {
+  function Play(startingFreq, waveform, offset, RandomFreq, GainSlider) {
     _classCallCheck(this, Play);
 
     this.playBtn = document.querySelector('#play-btn');
-    this.events();
     this.sound = false;
     this.initialFreq = startingFreq;
     this.waveform = waveform;
     this.offset = offset;
     this.randFreq = RandomFreq;
+    this.gainVal = GainSlider;
+    this.events();
   }
 
   _createClass(Play, [{
@@ -434,17 +497,29 @@ function () {
   }, {
     key: "playSound",
     value: function playSound() {
+      var _this2 = this;
+
       if (!this.sound) {
         var randFreq = new this.randFreq();
-        this.sound = new _Sound.default(this.initialFreq.freq, 0.5, this.waveform.oscType, this.offset, 1);
+        var gainVal = new this.gainVal();
+        var guesses = new _Guesses.default(randFreq);
+        var userAnswer = new _UserAnswer.default(guesses.correctAnswer); // console.log(userAnswer)
+
+        this.sound = new _Sound.default(this.initialFreq.freq, gainVal.range.value, this.waveform.oscType, this.offset, 1);
         this.sound.init();
         this.sound.stopSound();
-        this.sound2 = new _Sound.default(randFreq.freq, 0.5, this.waveform.oscType, 2, 3);
+        this.sound2 = new _Sound.default(randFreq.freq, gainVal.range.value, this.waveform.oscType, 2, 3);
         this.sound2.init();
         this.sound2.stopSound();
-        this.sound = false;
-        this.playBtn.textContent = 'Listen';
+        this.playBtn.textContent = 'Listen...';
         this.playBtn.classList.toggle('btn-danger');
+        setTimeout(function () {
+          _this2.playBtn.textContent = 'Play';
+
+          _this2.playBtn.classList.toggle('btn-danger');
+
+          _this2.sound = false;
+        }, 4000);
       }
     }
   }]);
@@ -453,8 +528,8 @@ function () {
 }(); // 
 
 
-var play1 = new Play(_FrequencySelector.default, _Waveform.default, 0, _RandomFrequency.default);
-},{"./Sound":"scripts/Sound.js","./Waveform":"scripts/Waveform.js","./FrequencySelector":"scripts/FrequencySelector.js","./RandomFrequency":"scripts/RandomFrequency.js","./Guesses":"scripts/Guesses.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+var play1 = new Play(_FrequencySelector.default, _Waveform.default, 0, _RandomFrequency.default, _GainSlider.default);
+},{"./Sound":"scripts/Sound.js","./Waveform":"scripts/Waveform.js","./FrequencySelector":"scripts/FrequencySelector.js","./RandomFrequency":"scripts/RandomFrequency.js","./Guesses":"scripts/Guesses.js","./UserAnswer":"scripts/UserAnswer.js","./GainSlider":"scripts/GainSlider.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -481,7 +556,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57983" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53922" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

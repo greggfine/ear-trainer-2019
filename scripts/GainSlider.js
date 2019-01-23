@@ -4,4 +4,4 @@ class GainSlider {
     }
 }
 
-export default new GainSlider();
+export default GainSlider;
