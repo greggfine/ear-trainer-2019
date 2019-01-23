@@ -381,7 +381,16 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var correct;
+var correctScoreStatus = 0;
+var wrongScoreStatus = 0;
+var chance = 0;
 var answerDisplay = document.querySelector('#answer-display');
+var correctScore = document.querySelector('#correct-score');
+var wrongScore = document.querySelector('#wrong-score');
+var chanceDisplay = document.querySelector('#chance');
+var resultMessage = document.querySelector('#result-message');
+var playBtn = document.querySelector('#play-btn');
+var playAgain = document.querySelector('#play-again');
 
 var UserAnswer =
 /*#__PURE__*/
@@ -403,10 +412,55 @@ function () {
   }, {
     key: "run",
     value: function run(e) {
-      if (+e.target.dataset.freq === +correct[0].dataset.freq) {
-        answerDisplay.textContent = 'correct!';
+      var _this = this;
+
+      if (chance === 2 && +e.target.dataset.freq === +correct[0].dataset.freq) {
+        chance = 0;
+        correctScore.textContent = ++correctScoreStatus;
+        resultMessage.textContent = "You got ".concat(correctScoreStatus, " correct!");
+        chanceDisplay.textContent = '';
+        playBtn.disabled = true;
+        var btn = document.createElement('button');
+        btn.textContent = 'Play Again?';
+        btn.addEventListener('click', function () {
+          playBtn.disabled = false;
+          correctScoreStatus = 0;
+          wrongScoreStatus = 0;
+          correctScore.textContent = '';
+          wrongScore.textContent = '';
+          resultMessage.textContent = '';
+          chance = 0;
+          this.parentNode.removeChild(btn);
+        });
+        playAgain.appendChild(btn);
+        return;
+      } else if (chance === 2 && +e.target.dataset.freq !== +correct[0].dataset.freq) {
+        chance = 0;
+        wrongScore.textContent = ++wrongScoreStatus;
+        resultMessage.textContent = "You got ".concat(correctScoreStatus, " correct!");
+        chanceDisplay.textContent = '';
+        playBtn.disabled = true;
+        var btn = document.createElement('button');
+        btn.textContent = 'Play Again?';
+        btn.addEventListener('click', function () {
+          playBtn.disabled = false;
+          correctScoreStatus = 0;
+          wrongScoreStatus = 0;
+          correctScore.textContent = '';
+          wrongScore.textContent = '';
+          resultMessage.textContent = '';
+          chance = 0;
+
+          _this.parentNode.removeChild(btn);
+        });
+        playAgain.appendChild(btn);
+        return;
+      } else if (+e.target.dataset.freq === +correct[0].dataset.freq) {
+        chance += 1;
+        correctScore.textContent = ++correctScoreStatus;
       } else {
-        answerDisplay.textContent = 'wrong!';
+        wrongScore.textContent = ++wrongScoreStatus;
+        chance += 1;
       }
     }
   }]);
@@ -460,6 +514,9 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var answerDisplay = document.querySelector('#answer-display');
+var chance = 0;
+var chanceDisplay = document.querySelector('#chance');
+var playAgain = document.querySelector('#play-again');
 
 var Play =
 /*#__PURE__*/
@@ -491,12 +548,20 @@ function () {
     value: function playSound() {
       var _this2 = this;
 
+      if (chance === 3) {
+        // playAgain.removeChild(button)
+        // console.log(playAgain)
+        chance = 0;
+      }
+
       if (!this.sound) {
         answerDisplay.textContent = '';
         var randFreq = new this.randFreq();
         var gainVal = new this.gainVal();
         var guesses = new _Guesses.default(randFreq);
         var userAnswer = new _UserAnswer.default(guesses.correctAnswer);
+        chance += 1;
+        chanceDisplay.textContent = "".concat(chance, " of 3 chances");
         this.sound = new _Sound.default(this.initialFreq.freq, gainVal.range.value, this.waveform.oscType, this.offset, 1);
         this.sound.init();
         this.sound.stopSound();

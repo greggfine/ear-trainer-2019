@@ -6,3 +6,12 @@ Play
 Sound
 
 Waveform
+
+
+Score
+
+5 Chances:
+
+Chance# = (After 5, reset)
+NumRight = 
+NumWrong =

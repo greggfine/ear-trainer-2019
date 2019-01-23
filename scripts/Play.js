@@ -6,6 +6,10 @@ import Guesses from './Guesses';
 import UserAnswer from './UserAnswer';
 import GainSlider from './GainSlider';
 const answerDisplay = document.querySelector('#answer-display');
+var chance = 0;
+const chanceDisplay = document.querySelector('#chance');
+const playAgain = document.querySelector('#play-again');
+
 
 
 class Play {
@@ -24,12 +28,19 @@ class Play {
         this.playBtn.addEventListener('click', () => this.playSound());
     }
     playSound() {
+        if(chance === 3){
+            // playAgain.removeChild(button)
+            // console.log(playAgain)
+            chance = 0;
+        }
         if(!this.sound){
         answerDisplay.textContent = '';
         var randFreq = new this.randFreq();
         var gainVal = new this.gainVal();
         var guesses = new Guesses(randFreq);
         var userAnswer = new UserAnswer(guesses.correctAnswer);
+        chance += 1;
+        chanceDisplay.textContent = `${chance} of 3 chances`;
 
         this.sound = new Sound(this.initialFreq.freq, gainVal.range.value, this.waveform.oscType, this.offset, 1);
         this.sound.init();
