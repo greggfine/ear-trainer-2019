@@ -6,5 +6,4 @@ class RandomFrequency {
     }
 }
 
-
 export default RandomFrequency;

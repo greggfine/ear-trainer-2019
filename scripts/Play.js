@@ -27,9 +27,10 @@ class Play {
 
     }
     events() {
-        this.playBtn.addEventListener('click', () => this.playSound());
+            this.playBtn.addEventListener('click', () => this.playSound());
     }
     playSound() {
+        
 
         Array.from(guessBtns).forEach((btn) => {
             btn.disabled = true;
@@ -56,23 +57,20 @@ class Play {
         this.sound2.init();
         this.sound2.stopSound();
 
-        
-        
         this.playBtn.textContent = 'Listen...';
         this.playBtn.classList.toggle('btn-danger');
 
         setTimeout(()=>{
             this.playBtn.textContent = 'Play'
             this.playBtn.classList.toggle('btn-danger');
+            this.playBtn.disabled = true;
             this.sound = false;
             Array.from(guessBtns).forEach((btn) => {
                 btn.disabled = false;
             })
-        }, 4000)
+        }, 3300)
         }
     }
 }
-
-// 
 
 var play1 = new Play(FrequencySelector, Waveform, 0, RandomFreq, GainSlider);

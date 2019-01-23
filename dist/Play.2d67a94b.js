@@ -414,6 +414,9 @@ function () {
     value: function run(e) {
       var _this = this;
 
+      setTimeout(function () {
+        playBtn.disabled = false;
+      }, 500);
       e.target.parentElement.childNodes.forEach(function (child) {
         child.disabled = true;
       });
@@ -426,6 +429,7 @@ function () {
         playBtn.disabled = true;
         var btn = document.createElement('button');
         btn.textContent = 'Play Again?';
+        btn.classList = 'btn btn-info';
         btn.addEventListener('click', function () {
           playBtn.disabled = false;
           correctScoreStatus = 0;
@@ -446,6 +450,7 @@ function () {
         playBtn.disabled = true;
         var btn = document.createElement('button');
         btn.textContent = 'Play Again?';
+        btn.classList = 'btn btn-info';
         btn.addEventListener('click', function () {
           playBtn.disabled = false;
           correctScoreStatus = 0;
@@ -587,18 +592,18 @@ function () {
 
           _this2.playBtn.classList.toggle('btn-danger');
 
+          _this2.playBtn.disabled = true;
           _this2.sound = false;
           Array.from(guessBtns).forEach(function (btn) {
             btn.disabled = false;
           });
-        }, 4000);
+        }, 3300);
       }
     }
   }]);
 
   return Play;
-}(); // 
-
+}();
 
 var play1 = new Play(_FrequencySelector.default, _Waveform.default, 0, _RandomFrequency.default, _GainSlider.default);
 },{"./Sound":"scripts/Sound.js","./Waveform":"scripts/Waveform.js","./FrequencySelector":"scripts/FrequencySelector.js","./RandomFrequency":"scripts/RandomFrequency.js","./Guesses":"scripts/Guesses.js","./UserAnswer":"scripts/UserAnswer.js","./GainSlider":"scripts/GainSlider.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {

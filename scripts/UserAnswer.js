@@ -11,8 +11,6 @@ const resultMessage = document.querySelector('#result-message');
 const playBtn = document.querySelector('#play-btn');
 const playAgain = document.querySelector('#play-again');
 
-
-
 class UserAnswer {
      constructor(correctAnswer){
         correct = correctAnswer;
@@ -24,6 +22,9 @@ class UserAnswer {
         this.btnGroup.addEventListener('click', this.run)
      }
      run(e){
+         setTimeout(() => {
+             playBtn.disabled = false;
+         }, 500)
          e.target.parentElement.childNodes.forEach((child) => {
                 child.disabled = true;
         })
@@ -34,7 +35,8 @@ class UserAnswer {
                 chanceDisplay.textContent = '';
                 playBtn.disabled = true;
                 var btn = document.createElement('button');
-                btn.textContent = 'Play Again?'
+                btn.textContent = 'Play Again?';
+                btn.classList = 'btn btn-info'
                 btn.addEventListener('click', function() {
                     playBtn.disabled = false;
                     correctScoreStatus = 0;
@@ -57,6 +59,7 @@ class UserAnswer {
                 playBtn.disabled = true;
                 var btn = document.createElement('button');
                 btn.textContent = 'Play Again?'
+                btn.classList = 'btn btn-info'
                 btn.addEventListener('click', () => {
                     playBtn.disabled = false;
                     correctScoreStatus = 0;
