@@ -1,17 +1,16 @@
 import RandomFrequency from './RandomFrequency';
 
 class Guesses {
-    constructor(){
-        this.guesses = document.querySelector('#guesses');
-        this.events();
+    constructor(randFreq){
+        this.guessBtns = document.querySelectorAll('.guess');
+        this.randFreq = randFreq;
+        const guessBtnArr = Array.from(this.guessBtns);
+        const correctAnswer = guessBtnArr.filter((guessBtn) => {
+            return Number(guessBtn.dataset.freq) === this.randFreq.freq;
+        })
+        this.correctAnswer = correctAnswer;
+        // console.log(this.correctAnswer)
     }
-    events(){
-        var li = document.createElement('li');
-        li.textContent = 'yo'
-        li.className = 'list-group-item'
-        this.guesses.appendChild(li)
-    }
-
 }
 
-export default new Guesses();
+export default Guesses;

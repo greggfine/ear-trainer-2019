@@ -3,44 +3,56 @@ import Waveform from './Waveform';
 import FrequencySelector from './FrequencySelector';  
 import RandomFreq from './RandomFrequency';
 import Guesses from './Guesses';
-
+import UserAnswer from './UserAnswer';
+import GainSlider from './GainSlider';
+const answerDisplay = document.querySelector('#answer-display');
 
 
 class Play {
-    constructor(startingFreq, waveform, offset, RandomFreq) {
+    constructor(startingFreq, waveform, offset, RandomFreq, GainSlider) {
         this.playBtn = document.querySelector('#play-btn');
-        this.events();
         this.sound = false;
         this.initialFreq = startingFreq;
         this.waveform = waveform;
         this.offset = offset;
         this.randFreq = RandomFreq;
+        this.gainVal = GainSlider;
+        this.events();
+
     }
     events() {
         this.playBtn.addEventListener('click', () => this.playSound());
     }
     playSound() {
         if(!this.sound){
-
+        answerDisplay.textContent = ''
         var randFreq = new this.randFreq();
-   
-        this.sound = new Sound(this.initialFreq.freq, 0.5, this.waveform.oscType, this.offset, 1);
+        var gainVal = new this.gainVal();
+        var guesses = new Guesses(randFreq);
+        var userAnswer = new UserAnswer(guesses.correctAnswer);
+
+        this.sound = new Sound(this.initialFreq.freq, gainVal.range.value, this.waveform.oscType, this.offset, 1);
         this.sound.init();
         this.sound.stopSound()
 
-        this.sound2 = new Sound(randFreq.freq, 0.5, this.waveform.oscType, 2, 3);
+        this.sound2 = new Sound(randFreq.freq, gainVal.range.value, this.waveform.oscType, 2, 3);
         this.sound2.init();
         this.sound2.stopSound();
 
-        this.sound = false;
         
-        this.playBtn.textContent = 'Listen';
+        
+        this.playBtn.textContent = 'Listen...';
         this.playBtn.classList.toggle('btn-danger');
+
+        setTimeout(()=>{
+            this.playBtn.textContent = 'Play'
+            this.playBtn.classList.toggle('btn-danger');
+            this.sound = false;
+        }, 4000)
         }
     }
 }
 
 // 
 
-var play1 = new Play(FrequencySelector, Waveform, 0, RandomFreq);
-
+var play1 = new Play(FrequencySelector, Waveform, 0, RandomFreq, GainSlider);
