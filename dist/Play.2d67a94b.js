@@ -361,7 +361,7 @@ var Guesses = function Guesses(randFreq) {
   var correctAnswer = guessBtnArr.filter(function (guessBtn) {
     return Number(guessBtn.dataset.freq) === _this.randFreq.freq;
   });
-  this.correctAnswer = correctAnswer; // console.log(this.correctAnswer)
+  this.correctAnswer = correctAnswer;
 };
 
 var _default = Guesses;
@@ -380,49 +380,39 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+var correct;
+var answerDisplay = document.querySelector('#answer-display');
+
 var UserAnswer =
 /*#__PURE__*/
 function () {
   function UserAnswer(correctAnswer) {
-    var _this = this;
-
     _classCallCheck(this, UserAnswer);
 
-    this.correctAnswer = correctAnswer;
-    this.clicked;
-    this.answers = document.querySelectorAll('.guess');
-    this.answers.forEach(function (answer) {
-      answer.addEventListener('click', function (e) {
-        _this.clicked = +e.target.dataset.freq;
+    correct = correctAnswer;
+    this.btnGroup = document.querySelector('#guesses'); // this.btnGroup.removeEventListener('click', this.run);
 
-        _this.answered();
-      });
-    });
+    this.answered();
   }
 
   _createClass(UserAnswer, [{
     key: "answered",
     value: function answered() {
-      //     console.log(+this.correctAnswer[0].dataset.freq)
-      //  console.log(this.clicked)
-      if (+this.correctAnswer[0].dataset.freq === this.clicked) {
-        console.log('correct');
+      this.btnGroup.addEventListener('click', this.run);
+    }
+  }, {
+    key: "run",
+    value: function run(e) {
+      if (+e.target.dataset.freq === +correct[0].dataset.freq) {
+        answerDisplay.textContent = 'correct!';
       } else {
-        console.log('wrong');
+        answerDisplay.textContent = 'wrong!';
       }
     }
   }]);
 
   return UserAnswer;
-}(); // var answers = document.querySelectorAll('.guess');
-// var clicked;
-// answers.forEach((answer) => {
-//     answer.addEventListener('click', (e) => {
-//             clicked = +e.target.dataset.freq
-//     })
-// })
-// console.log(clicked)
-
+}();
 
 var _default = UserAnswer;
 exports.default = _default;
@@ -469,6 +459,8 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+var answerDisplay = document.querySelector('#answer-display');
+
 var Play =
 /*#__PURE__*/
 function () {
@@ -500,11 +492,11 @@ function () {
       var _this2 = this;
 
       if (!this.sound) {
+        answerDisplay.textContent = '';
         var randFreq = new this.randFreq();
         var gainVal = new this.gainVal();
         var guesses = new _Guesses.default(randFreq);
-        var userAnswer = new _UserAnswer.default(guesses.correctAnswer); // console.log(userAnswer)
-
+        var userAnswer = new _UserAnswer.default(guesses.correctAnswer);
         this.sound = new _Sound.default(this.initialFreq.freq, gainVal.range.value, this.waveform.oscType, this.offset, 1);
         this.sound.init();
         this.sound.stopSound();
@@ -556,7 +548,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53922" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64214" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
