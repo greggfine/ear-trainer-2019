@@ -24,6 +24,9 @@ class UserAnswer {
         this.btnGroup.addEventListener('click', this.run)
      }
      run(e){
+         e.target.parentElement.childNodes.forEach((child) => {
+                child.disabled = true;
+        })
          if(chance === 2 && +e.target.dataset.freq === +correct[0].dataset.freq){
                 chance = 0;
                 correctScore.textContent = ++correctScoreStatus;

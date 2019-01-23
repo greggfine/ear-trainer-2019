@@ -9,8 +9,10 @@ const answerDisplay = document.querySelector('#answer-display');
 var chance = 0;
 const chanceDisplay = document.querySelector('#chance');
 const playAgain = document.querySelector('#play-again');
-
-
+const guessBtns = document.querySelectorAll('.guess')
+Array.from(guessBtns).forEach((btn) => {
+    btn.disabled = true;
+})
 
 class Play {
     constructor(startingFreq, waveform, offset, RandomFreq, GainSlider) {
@@ -28,6 +30,10 @@ class Play {
         this.playBtn.addEventListener('click', () => this.playSound());
     }
     playSound() {
+
+        Array.from(guessBtns).forEach((btn) => {
+            btn.disabled = true;
+        })
         if(chance === 3){
             // playAgain.removeChild(button)
             // console.log(playAgain)
@@ -59,6 +65,9 @@ class Play {
             this.playBtn.textContent = 'Play'
             this.playBtn.classList.toggle('btn-danger');
             this.sound = false;
+            Array.from(guessBtns).forEach((btn) => {
+                btn.disabled = false;
+            })
         }, 4000)
         }
     }

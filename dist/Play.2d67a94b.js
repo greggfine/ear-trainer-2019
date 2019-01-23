@@ -414,6 +414,10 @@ function () {
     value: function run(e) {
       var _this = this;
 
+      e.target.parentElement.childNodes.forEach(function (child) {
+        child.disabled = true;
+      });
+
       if (chance === 2 && +e.target.dataset.freq === +correct[0].dataset.freq) {
         chance = 0;
         correctScore.textContent = ++correctScoreStatus;
@@ -517,6 +521,10 @@ var answerDisplay = document.querySelector('#answer-display');
 var chance = 0;
 var chanceDisplay = document.querySelector('#chance');
 var playAgain = document.querySelector('#play-again');
+var guessBtns = document.querySelectorAll('.guess');
+Array.from(guessBtns).forEach(function (btn) {
+  btn.disabled = true;
+});
 
 var Play =
 /*#__PURE__*/
@@ -548,6 +556,10 @@ function () {
     value: function playSound() {
       var _this2 = this;
 
+      Array.from(guessBtns).forEach(function (btn) {
+        btn.disabled = true;
+      });
+
       if (chance === 3) {
         // playAgain.removeChild(button)
         // console.log(playAgain)
@@ -576,6 +588,9 @@ function () {
           _this2.playBtn.classList.toggle('btn-danger');
 
           _this2.sound = false;
+          Array.from(guessBtns).forEach(function (btn) {
+            btn.disabled = false;
+          });
         }, 4000);
       }
     }
