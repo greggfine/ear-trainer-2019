@@ -9,7 +9,6 @@ class Guesses {
             return Number(guessBtn.dataset.freq) === this.randFreq.freq;
         })
         this.correctAnswer = correctAnswer;
-        // console.log(this.correctAnswer)
     }
 }
 

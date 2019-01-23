@@ -344,7 +344,6 @@ var Guesses = function Guesses(randFreq) {
         return Number(guessBtn.dataset.freq) === _this.randFreq.freq;
     });
     this.correctAnswer = correctAnswer;
-    // console.log(this.correctAnswer)
 };
 
 exports.default = Guesses;
@@ -359,14 +358,14 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var crct;
+var correct;
 var answerDisplay = document.querySelector('#answer-display');
 
 var UserAnswer = function () {
     function UserAnswer(correctAnswer) {
         _classCallCheck(this, UserAnswer);
 
-        crct = correctAnswer;
+        correct = correctAnswer;
         this.btnGroup = document.querySelector('#guesses');
         // this.btnGroup.removeEventListener('click', this.run);
         this.answered();
@@ -380,7 +379,7 @@ var UserAnswer = function () {
     }, {
         key: 'run',
         value: function run(e) {
-            if (+e.target.dataset.freq === +crct[0].dataset.freq) {
+            if (+e.target.dataset.freq === +correct[0].dataset.freq) {
                 answerDisplay.textContent = 'correct!';
             } else {
                 answerDisplay.textContent = 'wrong!';

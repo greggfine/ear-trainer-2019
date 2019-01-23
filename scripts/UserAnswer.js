@@ -1,10 +1,10 @@
-var crct;
+var correct;
 const answerDisplay = document.querySelector('#answer-display');
 
 
 class UserAnswer {
      constructor(correctAnswer){
-        crct = correctAnswer;
+        correct = correctAnswer;
         this.btnGroup = document.querySelector('#guesses');
         // this.btnGroup.removeEventListener('click', this.run);
         this.answered();
@@ -13,7 +13,7 @@ class UserAnswer {
         this.btnGroup.addEventListener('click', this.run)
      }
      run(e){
-         if (+e.target.dataset.freq === +crct[0].dataset.freq){
+         if (+e.target.dataset.freq === +correct[0].dataset.freq){
              answerDisplay.textContent = 'correct!'
 
          } else {
