@@ -4,6 +4,14 @@ var correct;
 var correctScoreStatus = 0;
 var wrongScoreStatus = 0;
 var chance = 0;
+var answerOscType;
+var answerGainVal;
+
+function respondToUser(freq){
+         var sound = new Sound(freq, answerGainVal.range.value, answerOscType, 0, 1);
+         sound.init();
+         sound.stopSound()
+}
 
 const answerDisplay = document.querySelector('#answer-display');
 const correctScore = document.querySelector('#correct-score');
@@ -19,21 +27,20 @@ class UserAnswer {
         this.btnGroup = document.querySelector('#guesses');
         this.gainVal = gainVal;
         this.oscType = oscType;
+        answerOscType = oscType;
+        answerGainVal = gainVal;
         this.answered();
     }
     answered(){
         this.btnGroup.addEventListener('click', this.run)
     }
     run(e){
-        // IF
-        //  setTimeout(() => {
-        //      playBtn.disabled = false;
-        //  }, 500)
-
          e.target.parentElement.childNodes.forEach((child) => {
                 child.disabled = true;
         })
+        
          if(chance === 2 && +e.target.dataset.freq === +correct[0].dataset.freq){
+                respondToUser(+e.target.dataset.freq);
                 chance = 0;
                 correctScore.textContent = ++correctScoreStatus;
                 resultMessage.textContent = `You got ${correctScoreStatus} correct!`
@@ -43,6 +50,7 @@ class UserAnswer {
                 btn.textContent = 'Play Again?';
                 btn.classList = 'btn btn-info'
                 btn.addEventListener('click', function() {
+                    // CALL A 'RESET' FUNCTION HERE INSTEAD
                     playBtn.disabled = false;
                     correctScoreStatus = 0;
                     wrongScoreStatus = 0;
@@ -60,6 +68,7 @@ class UserAnswer {
                 return;
             }
             else if(chance === 2 && +e.target.dataset.freq !== +correct[0].dataset.freq){
+                respondToUser(+e.target.dataset.freq);
                 chance = 0;
                 wrongScore.textContent = ++wrongScoreStatus;
                 resultMessage.textContent = `You got ${correctScoreStatus} correct!`
@@ -86,6 +95,7 @@ class UserAnswer {
                 return;
             }
          else if (+e.target.dataset.freq === +correct[0].dataset.freq){
+            respondToUser(+e.target.dataset.freq);
             chance += 1;
              correctScore.textContent = ++correctScoreStatus;
              setTimeout(() => {
@@ -93,6 +103,7 @@ class UserAnswer {
              }, 500)
 
          } else {
+             respondToUser(+e.target.dataset.freq);
              wrongScore.textContent = ++wrongScoreStatus;
              chance += 1;
              setTimeout(() => {
@@ -100,6 +111,7 @@ class UserAnswer {
              }, 500)
          }
      }
+   
 }
 
 export default UserAnswer;

@@ -21,10 +21,12 @@ class Sound {
     }
 
     playSound(){
+        //  this.amp.gain.setValueAtTime(1, audioCtx.currentTime);
         this.osc.start(audioCtx.currentTime + this.offset);
     }
 
     stopSound(){
+        // this.amp.gain.exponentialRampToValueAtTime(0.500, audioCtx.currentTime + this.stopTime);
         this.osc.stop(audioCtx.currentTime + this.stopTime);
     }
 }

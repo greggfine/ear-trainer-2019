@@ -148,11 +148,13 @@ var Sound = function () {
     }, {
         key: 'playSound',
         value: function playSound() {
+            //  this.amp.gain.setValueAtTime(1, audioCtx.currentTime);
             this.osc.start(audioCtx.currentTime + this.offset);
         }
     }, {
         key: 'stopSound',
         value: function stopSound() {
+            // this.amp.gain.exponentialRampToValueAtTime(0.500, audioCtx.currentTime + this.stopTime);
             this.osc.stop(audioCtx.currentTime + this.stopTime);
         }
     }]);
@@ -368,6 +370,14 @@ var correct;
 var correctScoreStatus = 0;
 var wrongScoreStatus = 0;
 var chance = 0;
+var answerOscType;
+var answerGainVal;
+
+function respondToUser(freq) {
+    var sound = new _Sound2.default(freq, answerGainVal.range.value, answerOscType, 0, 1);
+    sound.init();
+    sound.stopSound();
+}
 
 var answerDisplay = document.querySelector('#answer-display');
 var correctScore = document.querySelector('#correct-score');
@@ -385,6 +395,8 @@ var UserAnswer = function () {
         this.btnGroup = document.querySelector('#guesses');
         this.gainVal = gainVal;
         this.oscType = oscType;
+        answerOscType = oscType;
+        answerGainVal = gainVal;
         this.answered();
     }
 
@@ -396,15 +408,12 @@ var UserAnswer = function () {
     }, {
         key: 'run',
         value: function run(e) {
-            // IF
-            //  setTimeout(() => {
-            //      playBtn.disabled = false;
-            //  }, 500)
-
             e.target.parentElement.childNodes.forEach(function (child) {
                 child.disabled = true;
             });
+
             if (chance === 2 && +e.target.dataset.freq === +correct[0].dataset.freq) {
+                respondToUser(+e.target.dataset.freq);
                 chance = 0;
                 correctScore.textContent = ++correctScoreStatus;
                 resultMessage.textContent = 'You got ' + correctScoreStatus + ' correct!';
@@ -414,6 +423,7 @@ var UserAnswer = function () {
                 btn.textContent = 'Play Again?';
                 btn.classList = 'btn btn-info';
                 btn.addEventListener('click', function () {
+                    // CALL A 'RESET' FUNCTION HERE INSTEAD
                     playBtn.disabled = false;
                     correctScoreStatus = 0;
                     wrongScoreStatus = 0;
@@ -430,6 +440,7 @@ var UserAnswer = function () {
 
                 return;
             } else if (chance === 2 && +e.target.dataset.freq !== +correct[0].dataset.freq) {
+                respondToUser(+e.target.dataset.freq);
                 chance = 0;
                 wrongScore.textContent = ++wrongScoreStatus;
                 resultMessage.textContent = 'You got ' + correctScoreStatus + ' correct!';
@@ -454,12 +465,14 @@ var UserAnswer = function () {
                 playAgain.appendChild(btn);
                 return;
             } else if (+e.target.dataset.freq === +correct[0].dataset.freq) {
+                respondToUser(+e.target.dataset.freq);
                 chance += 1;
                 correctScore.textContent = ++correctScoreStatus;
                 setTimeout(function () {
                     playBtn.disabled = false;
                 }, 500);
             } else {
+                respondToUser(+e.target.dataset.freq);
                 wrongScore.textContent = ++wrongScoreStatus;
                 chance += 1;
                 setTimeout(function () {
@@ -608,7 +621,7 @@ var Play = function () {
 }();
 
 var play1 = new Play(_FrequencySelector2.default, _Waveform2.default, 0, _RandomFrequency2.default, _GainSlider2.default);
-},{"./Sound":10,"./Waveform":11,"./FrequencySelector":12,"./RandomFrequency":13,"./Guesses":14,"./UserAnswer":15,"./GainSlider":16}],36:[function(require,module,exports) {
+},{"./Sound":10,"./Waveform":11,"./FrequencySelector":12,"./RandomFrequency":13,"./Guesses":14,"./UserAnswer":15,"./GainSlider":16}],37:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -778,5 +791,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[36,6], null)
+},{}]},{},[37,6], null)
 //# sourceMappingURL=/Play.920ce7b6.map
