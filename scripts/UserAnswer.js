@@ -1,3 +1,5 @@
+import Sound from './Sound';
+
 var correct;
 var correctScoreStatus = 0;
 var wrongScoreStatus = 0;
@@ -12,19 +14,22 @@ const playBtn = document.querySelector('#play-btn');
 const playAgain = document.querySelector('#play-again');
 
 class UserAnswer {
-     constructor(correctAnswer){
+     constructor(correctAnswer, gainVal, oscType){
         correct = correctAnswer;
         this.btnGroup = document.querySelector('#guesses');
-        // this.btnGroup.removeEventListener('click', this.run);
+        this.gainVal = gainVal;
+        this.oscType = oscType;
         this.answered();
-     }
-     answered(){
+    }
+    answered(){
         this.btnGroup.addEventListener('click', this.run)
-     }
-     run(e){
-         setTimeout(() => {
-             playBtn.disabled = false;
-         }, 500)
+    }
+    run(e){
+        // IF
+        //  setTimeout(() => {
+        //      playBtn.disabled = false;
+        //  }, 500)
+
          e.target.parentElement.childNodes.forEach((child) => {
                 child.disabled = true;
         })
@@ -45,7 +50,10 @@ class UserAnswer {
                     wrongScore.textContent = '';
                     resultMessage.textContent = '';
                     chance = 0;
-                    this.parentNode.removeChild(btn)
+                    this.parentElement.removeChild(btn)
+                    setTimeout(() => {
+                        playBtn.disabled = false;
+                    }, 500)
                 })
                 playAgain.appendChild(btn)
                 
@@ -60,7 +68,7 @@ class UserAnswer {
                 var btn = document.createElement('button');
                 btn.textContent = 'Play Again?'
                 btn.classList = 'btn btn-info'
-                btn.addEventListener('click', () => {
+                btn.addEventListener('click', function() {
                     playBtn.disabled = false;
                     correctScoreStatus = 0;
                     wrongScoreStatus = 0;
@@ -68,7 +76,10 @@ class UserAnswer {
                     wrongScore.textContent = '';
                     resultMessage.textContent = '';
                     chance = 0;
-                    this.parentNode.removeChild(btn)
+                    this.parentElement.removeChild(btn)
+                    setTimeout(() => {
+                        playBtn.disabled = false;
+                    }, 500)
 
                 })
                 playAgain.appendChild(btn)
@@ -77,10 +88,16 @@ class UserAnswer {
          else if (+e.target.dataset.freq === +correct[0].dataset.freq){
             chance += 1;
              correctScore.textContent = ++correctScoreStatus;
+             setTimeout(() => {
+                playBtn.disabled = false;
+             }, 500)
 
          } else {
              wrongScore.textContent = ++wrongScoreStatus;
              chance += 1;
+             setTimeout(() => {
+                playBtn.disabled = false;
+             }, 500)
          }
      }
 }
