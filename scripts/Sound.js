@@ -1,7 +1,7 @@
 var audioCtx = new AudioContext();
 
 class Sound {
-    constructor(freq=440.0, gainVal=0.2, oscType='sine', offset=0, stopTime){
+    constructor(freq = 261.63, gainVal=0.2, oscType='sine', offset=0, stopTime){
         this.freq = freq;
         this.gainVal = gainVal;
         this.oscType = oscType;

@@ -45,7 +45,7 @@ class Play {
         var randFreq = new this.randFreq();
         var gainVal = new this.gainVal();
         var guesses = new Guesses(randFreq);
-        var userAnswer = new UserAnswer(guesses.correctAnswer);
+        var userAnswer = new UserAnswer(guesses.correctAnswer, gainVal, this.waveform.oscType);
         chance += 1;
         chanceDisplay.textContent = `${chance} of 3 chances`;
 

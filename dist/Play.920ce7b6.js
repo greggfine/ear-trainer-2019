@@ -118,7 +118,7 @@ var audioCtx = new AudioContext();
 
 var Sound = function () {
     function Sound() {
-        var freq = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 440.0;
+        var freq = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 261.63;
         var gainVal = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.2;
         var oscType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'sine';
         var offset = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
@@ -356,6 +356,12 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _Sound = require('./Sound');
+
+var _Sound2 = _interopRequireDefault(_Sound);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var correct;
@@ -372,12 +378,13 @@ var playBtn = document.querySelector('#play-btn');
 var playAgain = document.querySelector('#play-again');
 
 var UserAnswer = function () {
-    function UserAnswer(correctAnswer) {
+    function UserAnswer(correctAnswer, gainVal, oscType) {
         _classCallCheck(this, UserAnswer);
 
         correct = correctAnswer;
         this.btnGroup = document.querySelector('#guesses');
-        // this.btnGroup.removeEventListener('click', this.run);
+        this.gainVal = gainVal;
+        this.oscType = oscType;
         this.answered();
     }
 
@@ -389,11 +396,11 @@ var UserAnswer = function () {
     }, {
         key: 'run',
         value: function run(e) {
-            var _this = this;
+            // IF
+            //  setTimeout(() => {
+            //      playBtn.disabled = false;
+            //  }, 500)
 
-            setTimeout(function () {
-                playBtn.disabled = false;
-            }, 500);
             e.target.parentElement.childNodes.forEach(function (child) {
                 child.disabled = true;
             });
@@ -414,7 +421,10 @@ var UserAnswer = function () {
                     wrongScore.textContent = '';
                     resultMessage.textContent = '';
                     chance = 0;
-                    this.parentNode.removeChild(btn);
+                    this.parentElement.removeChild(btn);
+                    setTimeout(function () {
+                        playBtn.disabled = false;
+                    }, 500);
                 });
                 playAgain.appendChild(btn);
 
@@ -436,16 +446,25 @@ var UserAnswer = function () {
                     wrongScore.textContent = '';
                     resultMessage.textContent = '';
                     chance = 0;
-                    _this.parentNode.removeChild(btn);
+                    this.parentElement.removeChild(btn);
+                    setTimeout(function () {
+                        playBtn.disabled = false;
+                    }, 500);
                 });
                 playAgain.appendChild(btn);
                 return;
             } else if (+e.target.dataset.freq === +correct[0].dataset.freq) {
                 chance += 1;
                 correctScore.textContent = ++correctScoreStatus;
+                setTimeout(function () {
+                    playBtn.disabled = false;
+                }, 500);
             } else {
                 wrongScore.textContent = ++wrongScoreStatus;
                 chance += 1;
+                setTimeout(function () {
+                    playBtn.disabled = false;
+                }, 500);
             }
         }
     }]);
@@ -454,7 +473,7 @@ var UserAnswer = function () {
 }();
 
 exports.default = UserAnswer;
-},{}],16:[function(require,module,exports) {
+},{"./Sound":10}],16:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -557,7 +576,7 @@ var Play = function () {
                 var randFreq = new this.randFreq();
                 var gainVal = new this.gainVal();
                 var guesses = new _Guesses2.default(randFreq);
-                var userAnswer = new _UserAnswer2.default(guesses.correctAnswer);
+                var userAnswer = new _UserAnswer2.default(guesses.correctAnswer, gainVal, this.waveform.oscType);
                 chance += 1;
                 chanceDisplay.textContent = chance + ' of 3 chances';
 
