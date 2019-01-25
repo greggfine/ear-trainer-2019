@@ -21,12 +21,17 @@ class Sound {
     }
 
     playSound(){
-        //  this.amp.gain.setValueAtTime(1, audioCtx.currentTime);
+        // this.amp.gain.setValueAtTime(this.amp.gain.value, 1)
+        // this.amp.gain.linearRampToValueAtTime(this.amp.gain.value, 5.05)
         this.osc.start(audioCtx.currentTime + this.offset);
     }
 
     stopSound(){
-        // this.amp.gain.exponentialRampToValueAtTime(0.500, audioCtx.currentTime + this.stopTime);
+
+        // this.amp.gain.setValueAtTime(0.0001, 0.8)
+        // this.amp.gain.linearRampToValueAtTime(0.0001, 0.9)
+        // this.amp.gain.setValueAtTime(this.amp.gain.value, audioCtx.currentTime );
+        // this.amp.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.03);
         this.osc.stop(audioCtx.currentTime + this.stopTime);
     }
 }

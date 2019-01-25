@@ -148,13 +148,18 @@ var Sound = function () {
     }, {
         key: 'playSound',
         value: function playSound() {
-            //  this.amp.gain.setValueAtTime(1, audioCtx.currentTime);
+            // this.amp.gain.setValueAtTime(this.amp.gain.value, 1)
+            // this.amp.gain.linearRampToValueAtTime(this.amp.gain.value, 5.05)
             this.osc.start(audioCtx.currentTime + this.offset);
         }
     }, {
         key: 'stopSound',
         value: function stopSound() {
-            // this.amp.gain.exponentialRampToValueAtTime(0.500, audioCtx.currentTime + this.stopTime);
+
+            // this.amp.gain.setValueAtTime(0.0001, 0.8)
+            // this.amp.gain.linearRampToValueAtTime(0.0001, 0.9)
+            // this.amp.gain.setValueAtTime(this.amp.gain.value, audioCtx.currentTime );
+            // this.amp.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.03);
             this.osc.stop(audioCtx.currentTime + this.stopTime);
         }
     }]);
@@ -664,7 +669,7 @@ var Play = function () {
 }();
 
 var play1 = new Play(_FrequencySelector2.default, _Waveform2.default, 0, _RandomFrequency2.default, _GainSlider2.default);
-},{"./Sound":10,"./Waveform":12,"./FrequencySelector":11,"./RandomFrequency":13,"./Guesses":14,"./UserAnswer":15,"./GainSlider":16,"./Mode":40}],39:[function(require,module,exports) {
+},{"./Sound":10,"./Waveform":12,"./FrequencySelector":11,"./RandomFrequency":13,"./Guesses":14,"./UserAnswer":15,"./GainSlider":16,"./Mode":40}],41:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -834,5 +839,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[39,6], null)
+},{}]},{},[41,6], null)
 //# sourceMappingURL=/Play.4b5f8be1.map
