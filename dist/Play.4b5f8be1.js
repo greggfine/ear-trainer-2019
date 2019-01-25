@@ -305,18 +305,7 @@ var _FrequencyMap2 = _interopRequireDefault(_FrequencyMap);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } // import frequencyArr from '../FrequencyMap';
-
-// class RandomFrequency {
-//     constructor(){
-//         this.freq = frequencyArr[Math.floor(Math.random() * frequencyArr.length) ]
-//     }
-// }
-
-// export default RandomFrequency;
-
-
-// ========================================
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var mode = document.querySelector('#mode');
 
@@ -543,7 +532,34 @@ mode.addEventListener('change', function (e) {
 });
 
 exports.default = mode;
-},{}],6:[function(require,module,exports) {
+},{}],43:[function(require,module,exports) {
+'use strict';
+
+var _GainSlider = require('./GainSlider');
+
+var _GainSlider2 = _interopRequireDefault(_GainSlider);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var gainVal = new _GainSlider2.default();
+
+var btnGroup = document.querySelector('#btn-group');
+var reset = document.querySelector('#reset');
+var mode = document.querySelector('#mode');
+var visibleEasy = document.querySelector('.visible-easy');
+var visibleHard = document.querySelector('.visible-hard');
+var startingFreqSelector = document.querySelector('#starting-freq-selector');
+
+reset.addEventListener('click', function () {
+    gainVal.range.value = 0.5;
+    mode.value = 'easy';
+    visibleEasy.classList.add('easy');
+    visibleHard.classList.remove('hard');
+    startingFreqSelector[0].selected = true;
+});
+
+console.log(gainVal);
+},{"./GainSlider":16}],6:[function(require,module,exports) {
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -580,11 +596,14 @@ var _Mode = require('./Mode');
 
 var _Mode2 = _interopRequireDefault(_Mode);
 
+var _Reset = require('./Reset');
+
+var _Reset2 = _interopRequireDefault(_Reset);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-console.log(mode.value);
 var answerDisplay = document.querySelector('#answer-display');
 var chance = 0;
 var chanceDisplay = document.querySelector('#chance');
@@ -628,8 +647,6 @@ var Play = function () {
                 btn.disabled = true;
             });
             if (chance === 3) {
-                // playAgain.removeChild(button)
-                // console.log(playAgain)
                 chance = 0;
             }
             if (!this.sound) {
@@ -669,7 +686,7 @@ var Play = function () {
 }();
 
 var play1 = new Play(_FrequencySelector2.default, _Waveform2.default, 0, _RandomFrequency2.default, _GainSlider2.default);
-},{"./Sound":10,"./Waveform":12,"./FrequencySelector":11,"./RandomFrequency":13,"./Guesses":14,"./UserAnswer":15,"./GainSlider":16,"./Mode":40}],42:[function(require,module,exports) {
+},{"./Sound":10,"./Waveform":12,"./FrequencySelector":11,"./RandomFrequency":13,"./Guesses":14,"./UserAnswer":15,"./GainSlider":16,"./Mode":40,"./Reset":43}],44:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -839,5 +856,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[42,6], null)
+},{}]},{},[44,6], null)
 //# sourceMappingURL=/Play.4b5f8be1.map
