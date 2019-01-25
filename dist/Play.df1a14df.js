@@ -163,7 +163,7 @@ var Sound = function () {
 }();
 
 exports.default = Sound;
-},{}],12:[function(require,module,exports) {
+},{}],11:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -202,7 +202,7 @@ var Waveform = function () {
 }();
 
 exports.default = new Waveform();
-},{}],11:[function(require,module,exports) {
+},{}],14:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -247,47 +247,57 @@ exports.default = new FrequencySelector();
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+// const frequencyMap = { 
+//     "c3": 130.81, 
+//     "d3": 146.83, 
+//     "e3": 164.81, 
+//     "f3": 174.61, 
+//     "g3": 196.0, 
+//     "a3": 220.0, 
+//     "b3": 246.94, 
+//     "c4": 261.63, 
+//     "c#4": 277.18, 
+//     "d4": 293.66, 
+//     "d#4": 311.13, 
+//     "e4": 329.63, 
+//     "f4": 349.23, 
+//     "f#4": 185.0, 
+//     "g4": 392.0, 
+//     "g#4": 207.65, 
+//     "a4": 440.0, 
+//     "a#4": 466.16, 
+//     "b4": 493.88, 
+//     "c5": 523.25 };
+
+// export default frequencyMap;
+
 // const frequencyArr = [
+//     130.81, 
+//     146.83, 
+//     164.81, 
+//     174.61, 
+//     196.0, 
+//     220.0, 
+//     246.94, 
 //     261.63, 
+//      277.18, 
 //     293.66, 
+//      311.13, 
 //     329.63, 
 //     349.23, 
+//      185.0, 
 //     392.0, 
+//      207.65, 
 //     440.0, 
+//      466.16, 
 //     493.88, 
 //     523.25
 // ]
 
-// export default frequencyArr;
+var frequencyArr = [261.63, 293.66, 329.63, 349.23, 392.0, 440.0, 493.88, 523.25];
 
-
-// ==================================================================================
-
-
-// const frequencyArrEasy = [
-//     261.63,
-//     293.66,
-//     329.63,
-// ]
-
-// const frequencyArrHard = [
-//     261.63,
-//     293.66,
-//     329.63,
-//     349.23,
-//     392.0,
-//     440.0,
-//     493.88,
-//     523.25
-// ]
-
-var frequencyMap = {
-    frequencyArrEasy: [261.63, 293.66, 329.63, 349.23, 392.0, 440.0, 493.88, 523.25],
-    frequencyArrHard: [261.63, 277.183, 293.66, 311.127, 329.63, 349.23, 369.994, 392.0, 415.305, 440.0, 466.164, 493.88, 523.25]
-};
-
-exports.default = frequencyMap;
-},{}],13:[function(require,module,exports) {
+exports.default = frequencyArr;
+},{}],12:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -300,33 +310,16 @@ var _FrequencyMap2 = _interopRequireDefault(_FrequencyMap);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } // import frequencyArr from '../FrequencyMap';
-
-// class RandomFrequency {
-//     constructor(){
-//         this.freq = frequencyArr[Math.floor(Math.random() * frequencyArr.length) ]
-//     }
-// }
-
-// export default RandomFrequency;
-
-
-// ========================================
-
-var mode = document.querySelector('#mode');
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var RandomFrequency = function RandomFrequency() {
     _classCallCheck(this, RandomFrequency);
 
-    if (mode.value === 'easy') {
-        this.freq = _FrequencyMap2.default.frequencyArrEasy[Math.floor(Math.random() * _FrequencyMap2.default.frequencyArrEasy.length)];
-    } else {
-        this.freq = _FrequencyMap2.default.frequencyArrHard[Math.floor(Math.random() * _FrequencyMap2.default.frequencyArrHard.length)];
-    }
+    this.freq = _FrequencyMap2.default[Math.floor(Math.random() * _FrequencyMap2.default.length)];
 };
 
 exports.default = RandomFrequency;
-},{"../FrequencyMap":26}],14:[function(require,module,exports) {
+},{"../FrequencyMap":26}],13:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -356,7 +349,7 @@ var Guesses = function Guesses(randFreq) {
 };
 
 exports.default = Guesses;
-},{"./RandomFrequency":13}],15:[function(require,module,exports) {
+},{"./RandomFrequency":12}],15:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -372,8 +365,6 @@ var _Sound2 = _interopRequireDefault(_Sound);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var mode = document.querySelector('#mode');
 
 var correct;
 var correctScoreStatus = 0;
@@ -402,7 +393,6 @@ var UserAnswer = function () {
 
         correct = correctAnswer;
         this.btnGroup = document.querySelector('#guesses');
-        this.btnGroup2 = document.querySelector('#guesses2');
         this.gainVal = gainVal;
         this.oscType = oscType;
         answerOscType = oscType;
@@ -414,7 +404,6 @@ var UserAnswer = function () {
         key: 'answered',
         value: function answered() {
             this.btnGroup.addEventListener('click', this.run);
-            this.btnGroup2.addEventListener('click', this.run);
         }
     }, {
         key: 'run',
@@ -445,7 +434,6 @@ var UserAnswer = function () {
                     this.parentElement.removeChild(btn);
                     setTimeout(function () {
                         playBtn.disabled = false;
-                        mode.disabled = false;
                     }, 500);
                 });
                 playAgain.appendChild(btn);
@@ -472,7 +460,6 @@ var UserAnswer = function () {
                     this.parentElement.removeChild(btn);
                     setTimeout(function () {
                         playBtn.disabled = false;
-                        mode.disabled = false;
                     }, 500);
                 });
                 playAgain.appendChild(btn);
@@ -515,29 +502,6 @@ var GainSlider = function GainSlider() {
 };
 
 exports.default = GainSlider;
-},{}],40:[function(require,module,exports) {
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var mode = document.querySelector('#mode');
-var visibleEasy = document.querySelector('.visible-easy');
-var visibleHard = document.querySelector('.visible-hard');
-visibleEasy.classList.add('easy');
-mode.addEventListener('change', function (e) {
-    if (e.target.value === 'easy') {
-        mode.disabled = true;
-        visibleEasy.classList.toggle('easy');
-        visibleHard.classList.toggle('hard');
-    } else {
-        mode.disabled = true;
-        visibleEasy.classList.toggle('easy');
-        visibleHard.classList.toggle('hard');
-    }
-});
-
-exports.default = mode;
 },{}],6:[function(require,module,exports) {
 'use strict';
 
@@ -571,15 +535,10 @@ var _GainSlider = require('./GainSlider');
 
 var _GainSlider2 = _interopRequireDefault(_GainSlider);
 
-var _Mode = require('./Mode');
-
-var _Mode2 = _interopRequireDefault(_Mode);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-console.log(mode.value);
 var answerDisplay = document.querySelector('#answer-display');
 var chance = 0;
 var chanceDisplay = document.querySelector('#chance');
@@ -616,8 +575,6 @@ var Play = function () {
         key: 'playSound',
         value: function playSound() {
             var _this2 = this;
-
-            mode.disabled = true;
 
             Array.from(guessBtns).forEach(function (btn) {
                 btn.disabled = true;
@@ -664,7 +621,7 @@ var Play = function () {
 }();
 
 var play1 = new Play(_FrequencySelector2.default, _Waveform2.default, 0, _RandomFrequency2.default, _GainSlider2.default);
-},{"./Sound":10,"./Waveform":12,"./FrequencySelector":11,"./RandomFrequency":13,"./Guesses":14,"./UserAnswer":15,"./GainSlider":16,"./Mode":40}],39:[function(require,module,exports) {
+},{"./Sound":10,"./Waveform":11,"./FrequencySelector":14,"./RandomFrequency":12,"./Guesses":13,"./UserAnswer":15,"./GainSlider":16}],28:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -693,7 +650,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '59490' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '58498' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -834,5 +791,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[39,6], null)
-//# sourceMappingURL=/Play.4b5f8be1.map
+},{}]},{},[28,6], null)
+//# sourceMappingURL=/Play.df1a14df.map

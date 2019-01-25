@@ -5,6 +5,8 @@ import RandomFreq from './RandomFrequency';
 import Guesses from './Guesses';
 import UserAnswer from './UserAnswer';
 import GainSlider from './GainSlider';
+import Mode from './Mode';
+console.log(mode.value)
 const answerDisplay = document.querySelector('#answer-display');
 var chance = 0;
 const chanceDisplay = document.querySelector('#chance');
@@ -30,7 +32,7 @@ class Play {
             this.playBtn.addEventListener('click', () => this.playSound());
     }
     playSound() {
-        
+        mode.disabled = true;
 
         Array.from(guessBtns).forEach((btn) => {
             btn.disabled = true;

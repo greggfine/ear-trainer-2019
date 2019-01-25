@@ -1,5 +1,7 @@
 import Sound from './Sound';
 
+const mode = document.querySelector('#mode');
+
 var correct;
 var correctScoreStatus = 0;
 var wrongScoreStatus = 0;
@@ -25,6 +27,7 @@ class UserAnswer {
      constructor(correctAnswer, gainVal, oscType){
         correct = correctAnswer;
         this.btnGroup = document.querySelector('#guesses');
+        this.btnGroup2 = document.querySelector('#guesses2');
         this.gainVal = gainVal;
         this.oscType = oscType;
         answerOscType = oscType;
@@ -33,6 +36,7 @@ class UserAnswer {
     }
     answered(){
         this.btnGroup.addEventListener('click', this.run)
+        this.btnGroup2.addEventListener('click', this.run)
     }
     run(e){
          e.target.parentElement.childNodes.forEach((child) => {
@@ -61,6 +65,7 @@ class UserAnswer {
                     this.parentElement.removeChild(btn)
                     setTimeout(() => {
                         playBtn.disabled = false;
+                        mode.disabled = false;
                     }, 500)
                 })
                 playAgain.appendChild(btn)
@@ -88,6 +93,7 @@ class UserAnswer {
                     this.parentElement.removeChild(btn)
                     setTimeout(() => {
                         playBtn.disabled = false;
+                        mode.disabled = false;
                     }, 500)
 
                 })

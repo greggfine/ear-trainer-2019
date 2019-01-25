@@ -1,0 +1,15 @@
+.visible-easy{
+    display: none;
+}
+
+.visible-hard{
+    display: none;
+}
+
+.easy {
+    display: block;
+} 
+
+.hard {
+    display: block;
+}  
