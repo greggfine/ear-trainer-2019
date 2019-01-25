@@ -1,20 +1,6 @@
-// import frequencyArr from '../FrequencyMap';
-
-// class RandomFrequency {
-//     constructor(){
-//         this.freq = frequencyArr[Math.floor(Math.random() * frequencyArr.length) ]
-//     }
-// }
-
-// export default RandomFrequency;
-
-
-// ========================================
-
 import FrequencyMap from '../FrequencyMap';
 
 const mode = document.querySelector('#mode');
-
 
 class RandomFrequency {
     constructor(){

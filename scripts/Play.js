@@ -6,7 +6,7 @@ import Guesses from './Guesses';
 import UserAnswer from './UserAnswer';
 import GainSlider from './GainSlider';
 import Mode from './Mode';
-console.log(mode.value)
+import Reset from './Reset';
 const answerDisplay = document.querySelector('#answer-display');
 var chance = 0;
 const chanceDisplay = document.querySelector('#chance');
@@ -38,8 +38,6 @@ class Play {
             btn.disabled = true;
         })
         if(chance === 3){
-            // playAgain.removeChild(button)
-            // console.log(playAgain)
             chance = 0;
         }
         if(!this.sound){
