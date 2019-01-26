@@ -1,3 +1,22 @@
+html{
+    --grey: #666A86;
+    --lightGrey: #788aa3;
+    --darkGreen: #92B6B1;
+    --green: #B2C9AB;
+    --yellow: #E8DDB5;
+}
+
+
+body {
+    /* background-color: var(--grey); */
+    /* background-color: var(--lightGrey); */
+    /* background-color: var(--darkGreen); */
+    /* background-color: var(--green); */
+    /* background-color: var(--yellow); */
+}
+
+
+
 .visible-easy{
     display: none;
 }

@@ -15,7 +15,7 @@
 
     <div class="container text-center">
 
-        <h1 class="mb-5 display-4 text-info">Ear Training</h1>
+        <h1 class="my-5 display-4 text-info">Intervallic Ear Trainer</h1>
 
         <input id="gain-slider" type="range" min="0" max="1" step="0.001" class="d-block mb-5 mx-auto">
 
@@ -39,11 +39,21 @@
 
         <button id="reset" class="btn btn-danger">Reset</button>
 
-        <div class="mt-5 mb-5" id="btn-group">
+        <!-- <div class="mt-5 mb-5" id="btn-group">
             <button class="btn btn-info" id="sine">Sine</button>
             <button class="btn btn-secondary" id="triangle">Triangle</button>
             <button class="btn btn-primary" id="sawtooth">Sawtooth</button>
             <button class="btn btn-warning" id="square">Square</button>
+        </div> -->
+
+        <div class="mt-5 mb-5 dropdown" id="btn-group">
+            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Waveforms</button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="btn btn-info dropdown-item" id="sine">Sine</a>
+                <a class="btn btn-secondary dropdown-item" id="triangle">Triangle</a>
+                <a class="btn btn-primary dropdown-item" id="sawtooth">Sawtooth</a>
+                <a class="btn btn-warning dropdown-item" id="square">Square</a>
+            </div>
         </div>
 
         <div id="guesses" class="visible-easy">

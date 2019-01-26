@@ -686,7 +686,7 @@ var Play = function () {
 }();
 
 var play1 = new Play(_FrequencySelector2.default, _Waveform2.default, 0, _RandomFrequency2.default, _GainSlider2.default);
-},{"./Sound":10,"./Waveform":12,"./FrequencySelector":11,"./RandomFrequency":13,"./Guesses":14,"./UserAnswer":15,"./GainSlider":16,"./Mode":40,"./Reset":55}],54:[function(require,module,exports) {
+},{"./Sound":10,"./Waveform":12,"./FrequencySelector":11,"./RandomFrequency":13,"./Guesses":14,"./UserAnswer":15,"./GainSlider":16,"./Mode":40,"./Reset":55}],16:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -715,7 +715,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '59490' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '63682' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -856,5 +856,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[54,6], null)
+},{}]},{},[16,6], null)
 //# sourceMappingURL=/Play.4b5f8be1.map
