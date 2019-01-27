@@ -148,18 +148,13 @@ var Sound = function () {
     }, {
         key: 'playSound',
         value: function playSound() {
-            // this.amp.gain.setValueAtTime(this.amp.gain.value, 1)
-            // this.amp.gain.linearRampToValueAtTime(this.amp.gain.value, 5.05)
+            this.amp.gain.setValueAtTime(this.amp.gain.value, 0);
             this.osc.start(audioCtx.currentTime + this.offset);
         }
     }, {
         key: 'stopSound',
         value: function stopSound() {
-
-            // this.amp.gain.setValueAtTime(0.0001, 0.8)
-            // this.amp.gain.linearRampToValueAtTime(0.0001, 0.9)
-            // this.amp.gain.setValueAtTime(this.amp.gain.value, audioCtx.currentTime );
-            // this.amp.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.03);
+            this.amp.gain.linearRampToValueAtTime(0.0211, audioCtx.currentTime + this.stopTime);
             this.osc.stop(audioCtx.currentTime + this.stopTime);
         }
     }]);
@@ -493,23 +488,7 @@ var UserAnswer = function () {
 }();
 
 exports.default = UserAnswer;
-},{"./Sound":10}],16:[function(require,module,exports) {
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var GainSlider = function GainSlider() {
-    _classCallCheck(this, GainSlider);
-
-    this.range = document.querySelector('#gain-slider');
-};
-
-exports.default = GainSlider;
-},{}],40:[function(require,module,exports) {
+},{"./Sound":10}],40:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -533,33 +512,29 @@ mode.addEventListener('change', function (e) {
 
 exports.default = mode;
 },{}],55:[function(require,module,exports) {
-'use strict';
+// import GainSlider from './GainSlider';
 
-var _GainSlider = require('./GainSlider');
+// const gainVal = new GainSlider();
 
-var _GainSlider2 = _interopRequireDefault(_GainSlider);
+// const btnGroup = document.querySelector('#btn-group');
+// const reset = document.querySelector('#reset');
+// const mode = document.querySelector('#mode');
+// const visibleEasy = document.querySelector('.visible-easy');
+// const visibleHard = document.querySelector('.visible-hard');
+// const startingFreqSelector = document.querySelector('#starting-freq-selector');
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var gainVal = new _GainSlider2.default();
+// reset.addEventListener('click', () => {
+//     gainVal.range.value = 0.5;
+//     mode.value = 'easy';
+//     visibleEasy.classList.add('easy');
+//     visibleHard.classList.remove('hard');
+//     startingFreqSelector[0].selected = true;
+// })
 
-var btnGroup = document.querySelector('#btn-group');
-var reset = document.querySelector('#reset');
-var mode = document.querySelector('#mode');
-var visibleEasy = document.querySelector('.visible-easy');
-var visibleHard = document.querySelector('.visible-hard');
-var startingFreqSelector = document.querySelector('#starting-freq-selector');
 
-reset.addEventListener('click', function () {
-    gainVal.range.value = 0.5;
-    mode.value = 'easy';
-    visibleEasy.classList.add('easy');
-    visibleHard.classList.remove('hard');
-    startingFreqSelector[0].selected = true;
-});
-
-console.log(gainVal);
-},{"./GainSlider":16}],6:[function(require,module,exports) {
+// console.log(gainVal);
+},{}],6:[function(require,module,exports) {
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -588,10 +563,6 @@ var _UserAnswer = require('./UserAnswer');
 
 var _UserAnswer2 = _interopRequireDefault(_UserAnswer);
 
-var _GainSlider = require('./GainSlider');
-
-var _GainSlider2 = _interopRequireDefault(_GainSlider);
-
 var _Mode = require('./Mode');
 
 var _Mode2 = _interopRequireDefault(_Mode);
@@ -603,6 +574,8 @@ var _Reset2 = _interopRequireDefault(_Reset);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+// import GainSlider from './GainSlider';
+
 
 var answerDisplay = document.querySelector('#answer-display');
 var chance = 0;
@@ -612,6 +585,12 @@ var guessBtns = document.querySelectorAll('.guess');
 Array.from(guessBtns).forEach(function (btn) {
     btn.disabled = true;
 });
+
+var GainSlider = function GainSlider() {
+    _classCallCheck(this, GainSlider);
+
+    this.range = document.querySelector('#gain-slider');
+};
 
 var Play = function () {
     function Play(startingFreq, waveform, offset, RandomFreq, GainSlider) {
@@ -685,8 +664,8 @@ var Play = function () {
     return Play;
 }();
 
-var play1 = new Play(_FrequencySelector2.default, _Waveform2.default, 0, _RandomFrequency2.default, _GainSlider2.default);
-},{"./Sound":10,"./Waveform":12,"./FrequencySelector":11,"./RandomFrequency":13,"./Guesses":14,"./UserAnswer":15,"./GainSlider":16,"./Mode":40,"./Reset":55}],16:[function(require,module,exports) {
+var play1 = new Play(_FrequencySelector2.default, _Waveform2.default, 0, _RandomFrequency2.default, GainSlider);
+},{"./Sound":10,"./Waveform":12,"./FrequencySelector":11,"./RandomFrequency":13,"./Guesses":14,"./UserAnswer":15,"./Mode":40,"./Reset":55}],16:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -715,7 +694,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '63682' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '64384' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
