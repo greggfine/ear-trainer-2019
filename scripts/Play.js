@@ -4,7 +4,7 @@ import FrequencySelector from './FrequencySelector';
 import RandomFreq from './RandomFrequency';
 import Guesses from './Guesses';
 import UserAnswer from './UserAnswer';
-import GainSlider from './GainSlider';
+// import GainSlider from './GainSlider';
 import Mode from './Mode';
 import Reset from './Reset';
 const answerDisplay = document.querySelector('#answer-display');
@@ -15,6 +15,13 @@ const guessBtns = document.querySelectorAll('.guess')
 Array.from(guessBtns).forEach((btn) => {
     btn.disabled = true;
 })
+
+class GainSlider {
+    constructor() {
+        this.range = document.querySelector('#gain-slider');
+    }
+}
+
 
 class Play {
     constructor(startingFreq, waveform, offset, RandomFreq, GainSlider) {
