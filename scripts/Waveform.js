@@ -4,7 +4,8 @@ class Waveform {
         this.events();
     }
     events(){
-        this.btnGroup.addEventListener('click', (e) => this.selectWaveform(e.target.id));
+        this.btnGroup.addEventListener('change', (e) => this.selectWaveform(e.target.value));
+        // this.btnGroup.addEventListener('click', (e) => this.selectWaveform(e.target.id));
     }
     selectWaveform(waveformId){
         this.oscType = waveformId;

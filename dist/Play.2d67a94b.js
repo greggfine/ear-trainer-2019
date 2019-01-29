@@ -198,9 +198,9 @@ function () {
     value: function events() {
       var _this = this;
 
-      this.btnGroup.addEventListener('click', function (e) {
-        return _this.selectWaveform(e.target.id);
-      });
+      this.btnGroup.addEventListener('change', function (e) {
+        return _this.selectWaveform(e.target.value);
+      }); // this.btnGroup.addEventListener('click', (e) => this.selectWaveform(e.target.id));
     }
   }, {
     key: "selectWaveform",
@@ -684,7 +684,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58187" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62407" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

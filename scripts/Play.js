@@ -13,6 +13,7 @@ const chanceDisplay = document.querySelector('#chance');
 const playAgain = document.querySelector('#play-again');
 const guessBtns = document.querySelectorAll('.guess');
 
+
 Array.from(guessBtns).forEach((btn) => {
     btn.disabled = true;
 })
@@ -27,10 +28,9 @@ class Play {
         this.randFreq = RandomFreq;
         this.gainVal = GainSlider;
         this.events();
-
     }
     events() {
-            this.playBtn.addEventListener('click', () => this.playSound());
+        this.playBtn.addEventListener('click', () => this.playSound());
     }
     playSound() {
         mode.disabled = true;
