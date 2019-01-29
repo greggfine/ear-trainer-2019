@@ -43,7 +43,7 @@ class UserAnswer {
                 child.disabled = true;
         })
         
-         if(chance === 2 && +e.target.dataset.freq === +correct[0].dataset.freq){
+         if(chance === 4 && +e.target.dataset.freq === +correct[0].dataset.freq){
                 respondToUser(+e.target.dataset.freq);
                 chance = 0;
                 correctScore.textContent = ++correctScoreStatus;
@@ -72,7 +72,7 @@ class UserAnswer {
                 
                 return;
             }
-            else if(chance === 2 && +e.target.dataset.freq !== +correct[0].dataset.freq){
+            else if(chance === 4 && +e.target.dataset.freq !== +correct[0].dataset.freq){
                 respondToUser(+e.target.dataset.freq);
                 chance = 0;
                 wrongScore.textContent = ++wrongScoreStatus;
@@ -119,6 +119,7 @@ class UserAnswer {
      }
    
 }
+
 
 export default UserAnswer;
 

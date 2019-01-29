@@ -6,12 +6,13 @@ import Guesses from './Guesses';
 import UserAnswer from './UserAnswer';
 import GainSlider from './GainSlider';
 import Mode from './Mode';
-import Reset from './Reset';
+// import Reset from './Reset';
 const answerDisplay = document.querySelector('#answer-display');
 var chance = 0;
 const chanceDisplay = document.querySelector('#chance');
 const playAgain = document.querySelector('#play-again');
-const guessBtns = document.querySelectorAll('.guess')
+const guessBtns = document.querySelectorAll('.guess');
+
 Array.from(guessBtns).forEach((btn) => {
     btn.disabled = true;
 })
@@ -37,7 +38,7 @@ class Play {
         Array.from(guessBtns).forEach((btn) => {
             btn.disabled = true;
         })
-        if(chance === 3){
+        if(chance === 5){
             chance = 0;
         }
         if(!this.sound){
@@ -47,7 +48,7 @@ class Play {
         var guesses = new Guesses(randFreq);
         var userAnswer = new UserAnswer(guesses.correctAnswer, gainVal, this.waveform.oscType);
         chance += 1;
-        chanceDisplay.textContent = `${chance} of 3 chances`;
+        chanceDisplay.textContent = `${chance} of 5 chances`;
 
         this.sound = new Sound(this.initialFreq.freq, gainVal.range.value, this.waveform.oscType, this.offset, 1);
         this.sound.init();

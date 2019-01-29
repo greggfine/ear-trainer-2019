@@ -124,7 +124,7 @@ var Sound =
 /*#__PURE__*/
 function () {
   function Sound() {
-    var freq = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 440.0;
+    var freq = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 261.63;
     var gainVal = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.2;
     var oscType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'sine';
     var offset = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
@@ -159,6 +159,7 @@ function () {
   }, {
     key: "stopSound",
     value: function stopSound() {
+      this.amp.gain.exponentialRampToValueAtTime(0.10, audioCtx.currentTime + this.stopTime);
       this.osc.stop(audioCtx.currentTime + this.stopTime);
     }
   }]);
@@ -267,52 +268,38 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-// const frequencyMap = { 
-//     "c3": 130.81, 
-//     "d3": 146.83, 
-//     "e3": 164.81, 
-//     "f3": 174.61, 
-//     "g3": 196.0, 
-//     "a3": 220.0, 
-//     "b3": 246.94, 
-//     "c4": 261.63, 
-//     "c#4": 277.18, 
-//     "d4": 293.66, 
-//     "d#4": 311.13, 
-//     "e4": 329.63, 
-//     "f4": 349.23, 
-//     "f#4": 185.0, 
-//     "g4": 392.0, 
-//     "g#4": 207.65, 
-//     "a4": 440.0, 
-//     "a#4": 466.16, 
-//     "b4": 493.88, 
-//     "c5": 523.25 };
-// export default frequencyMap;
 // const frequencyArr = [
-//     130.81, 
-//     146.83, 
-//     164.81, 
-//     174.61, 
-//     196.0, 
-//     220.0, 
-//     246.94, 
 //     261.63, 
-//      277.18, 
 //     293.66, 
-//      311.13, 
 //     329.63, 
 //     349.23, 
-//      185.0, 
 //     392.0, 
-//      207.65, 
 //     440.0, 
-//      466.16, 
 //     493.88, 
 //     523.25
 // ]
-var frequencyArr = [261.63, 293.66, 329.63, 349.23, 392.0, 440.0, 493.88, 523.25];
-var _default = frequencyArr;
+// export default frequencyArr;
+// ==================================================================================
+// const frequencyArrEasy = [
+//     261.63,
+//     293.66,
+//     329.63,
+// ]
+// const frequencyArrHard = [
+//     261.63,
+//     293.66,
+//     329.63,
+//     349.23,
+//     392.0,
+//     440.0,
+//     493.88,
+//     523.25
+// ]
+var frequencyMap = {
+  frequencyArrEasy: [261.63, 293.66, 329.63, 349.23, 392.0, 440.0, 493.88, 523.25],
+  frequencyArrHard: [261.63, 277.183, 293.66, 311.127, 329.63, 349.23, 369.994, 392.0, 415.305, 440.0, 466.164, 493.88, 523.25]
+};
+var _default = frequencyMap;
 exports.default = _default;
 },{}],"scripts/RandomFrequency.js":[function(require,module,exports) {
 "use strict";
@@ -328,10 +315,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var mode = document.querySelector('#mode');
+
 var RandomFrequency = function RandomFrequency() {
   _classCallCheck(this, RandomFrequency);
 
-  this.freq = _FrequencyMap.default[Math.floor(Math.random() * _FrequencyMap.default.length)];
+  if (mode.value === 'easy') {
+    this.freq = _FrequencyMap.default.frequencyArrEasy[Math.floor(Math.random() * _FrequencyMap.default.frequencyArrEasy.length)];
+  } else {
+    this.freq = _FrequencyMap.default.frequencyArrHard[Math.floor(Math.random() * _FrequencyMap.default.frequencyArrHard.length)];
+  }
 };
 
 var _default = RandomFrequency;
@@ -374,16 +367,30 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _Sound = _interopRequireDefault(require("./Sound"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+var mode = document.querySelector('#mode');
 var correct;
 var correctScoreStatus = 0;
 var wrongScoreStatus = 0;
 var chance = 0;
+var answerOscType;
+var answerGainVal;
+
+function respondToUser(freq) {
+  var sound = new _Sound.default(freq, answerGainVal.range.value, answerOscType, 0, 1);
+  sound.init();
+  sound.stopSound();
+}
+
 var answerDisplay = document.querySelector('#answer-display');
 var correctScore = document.querySelector('#correct-score');
 var wrongScore = document.querySelector('#wrong-score');
@@ -395,12 +402,16 @@ var playAgain = document.querySelector('#play-again');
 var UserAnswer =
 /*#__PURE__*/
 function () {
-  function UserAnswer(correctAnswer) {
+  function UserAnswer(correctAnswer, gainVal, oscType) {
     _classCallCheck(this, UserAnswer);
 
     correct = correctAnswer;
-    this.btnGroup = document.querySelector('#guesses'); // this.btnGroup.removeEventListener('click', this.run);
-
+    this.btnGroup = document.querySelector('#guesses');
+    this.btnGroup2 = document.querySelector('#guesses2');
+    this.gainVal = gainVal;
+    this.oscType = oscType;
+    answerOscType = oscType;
+    answerGainVal = gainVal;
     this.answered();
   }
 
@@ -408,20 +419,17 @@ function () {
     key: "answered",
     value: function answered() {
       this.btnGroup.addEventListener('click', this.run);
+      this.btnGroup2.addEventListener('click', this.run);
     }
   }, {
     key: "run",
     value: function run(e) {
-      var _this = this;
-
-      setTimeout(function () {
-        playBtn.disabled = false;
-      }, 500);
       e.target.parentElement.childNodes.forEach(function (child) {
         child.disabled = true;
       });
 
-      if (chance === 2 && +e.target.dataset.freq === +correct[0].dataset.freq) {
+      if (chance === 4 && +e.target.dataset.freq === +correct[0].dataset.freq) {
+        respondToUser(+e.target.dataset.freq);
         chance = 0;
         correctScore.textContent = ++correctScoreStatus;
         resultMessage.textContent = "You got ".concat(correctScoreStatus, " correct!");
@@ -431,6 +439,7 @@ function () {
         btn.textContent = 'Play Again?';
         btn.classList = 'btn btn-info';
         btn.addEventListener('click', function () {
+          // CALL A 'RESET' FUNCTION HERE INSTEAD
           playBtn.disabled = false;
           correctScoreStatus = 0;
           wrongScoreStatus = 0;
@@ -438,11 +447,16 @@ function () {
           wrongScore.textContent = '';
           resultMessage.textContent = '';
           chance = 0;
-          this.parentNode.removeChild(btn);
+          this.parentElement.removeChild(btn);
+          setTimeout(function () {
+            playBtn.disabled = false;
+            mode.disabled = false;
+          }, 500);
         });
         playAgain.appendChild(btn);
         return;
-      } else if (chance === 2 && +e.target.dataset.freq !== +correct[0].dataset.freq) {
+      } else if (chance === 4 && +e.target.dataset.freq !== +correct[0].dataset.freq) {
+        respondToUser(+e.target.dataset.freq);
         chance = 0;
         wrongScore.textContent = ++wrongScoreStatus;
         resultMessage.textContent = "You got ".concat(correctScoreStatus, " correct!");
@@ -459,17 +473,28 @@ function () {
           wrongScore.textContent = '';
           resultMessage.textContent = '';
           chance = 0;
-
-          _this.parentNode.removeChild(btn);
+          this.parentElement.removeChild(btn);
+          setTimeout(function () {
+            playBtn.disabled = false;
+            mode.disabled = false;
+          }, 500);
         });
         playAgain.appendChild(btn);
         return;
       } else if (+e.target.dataset.freq === +correct[0].dataset.freq) {
+        respondToUser(+e.target.dataset.freq);
         chance += 1;
         correctScore.textContent = ++correctScoreStatus;
+        setTimeout(function () {
+          playBtn.disabled = false;
+        }, 500);
       } else {
+        respondToUser(+e.target.dataset.freq);
         wrongScore.textContent = ++wrongScoreStatus;
         chance += 1;
+        setTimeout(function () {
+          playBtn.disabled = false;
+        }, 500);
       }
     }
   }]);
@@ -479,7 +504,7 @@ function () {
 
 var _default = UserAnswer;
 exports.default = _default;
-},{}],"scripts/GainSlider.js":[function(require,module,exports) {
+},{"./Sound":"scripts/Sound.js"}],"scripts/GainSlider.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -496,6 +521,30 @@ var GainSlider = function GainSlider() {
 };
 
 var _default = GainSlider;
+exports.default = _default;
+},{}],"scripts/Mode.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var mode = document.querySelector('#mode');
+var visibleEasy = document.querySelector('.visible-easy');
+var visibleHard = document.querySelector('.visible-hard');
+visibleEasy.classList.add('easy');
+mode.addEventListener('change', function (e) {
+  if (e.target.value === 'easy') {
+    mode.disabled = true;
+    visibleEasy.classList.toggle('easy');
+    visibleHard.classList.toggle('hard');
+  } else {
+    mode.disabled = true;
+    visibleEasy.classList.toggle('easy');
+    visibleHard.classList.toggle('hard');
+  }
+});
+var _default = mode;
 exports.default = _default;
 },{}],"scripts/Play.js":[function(require,module,exports) {
 "use strict";
@@ -514,6 +563,8 @@ var _UserAnswer = _interopRequireDefault(require("./UserAnswer"));
 
 var _GainSlider = _interopRequireDefault(require("./GainSlider"));
 
+var _Mode = _interopRequireDefault(require("./Mode"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -522,6 +573,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+// import Reset from './Reset';
 var answerDisplay = document.querySelector('#answer-display');
 var chance = 0;
 var chanceDisplay = document.querySelector('#chance');
@@ -561,13 +613,12 @@ function () {
     value: function playSound() {
       var _this2 = this;
 
+      mode.disabled = true;
       Array.from(guessBtns).forEach(function (btn) {
         btn.disabled = true;
       });
 
-      if (chance === 3) {
-        // playAgain.removeChild(button)
-        // console.log(playAgain)
+      if (chance === 5) {
         chance = 0;
       }
 
@@ -576,9 +627,9 @@ function () {
         var randFreq = new this.randFreq();
         var gainVal = new this.gainVal();
         var guesses = new _Guesses.default(randFreq);
-        var userAnswer = new _UserAnswer.default(guesses.correctAnswer);
+        var userAnswer = new _UserAnswer.default(guesses.correctAnswer, gainVal, this.waveform.oscType);
         chance += 1;
-        chanceDisplay.textContent = "".concat(chance, " of 3 chances");
+        chanceDisplay.textContent = "".concat(chance, " of 5 chances");
         this.sound = new _Sound.default(this.initialFreq.freq, gainVal.range.value, this.waveform.oscType, this.offset, 1);
         this.sound.init();
         this.sound.stopSound();
@@ -606,7 +657,7 @@ function () {
 }();
 
 var play1 = new Play(_FrequencySelector.default, _Waveform.default, 0, _RandomFrequency.default, _GainSlider.default);
-},{"./Sound":"scripts/Sound.js","./Waveform":"scripts/Waveform.js","./FrequencySelector":"scripts/FrequencySelector.js","./RandomFrequency":"scripts/RandomFrequency.js","./Guesses":"scripts/Guesses.js","./UserAnswer":"scripts/UserAnswer.js","./GainSlider":"scripts/GainSlider.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./Sound":"scripts/Sound.js","./Waveform":"scripts/Waveform.js","./FrequencySelector":"scripts/FrequencySelector.js","./RandomFrequency":"scripts/RandomFrequency.js","./Guesses":"scripts/Guesses.js","./UserAnswer":"scripts/UserAnswer.js","./GainSlider":"scripts/GainSlider.js","./Mode":"scripts/Mode.js"}],"../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -633,7 +684,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64214" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58187" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
@@ -775,5 +826,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","scripts/Play.js"], null)
+},{}]},{},["../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","scripts/Play.js"], null)
 //# sourceMappingURL=/Play.2d67a94b.map
