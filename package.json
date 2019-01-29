@@ -1,0 +1,24 @@
+{
+  "name": "interval_game_v28",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "deploy": "gh-pages -d dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/greggfine/ear-trainer-2019.git"
+  },
+  "homepage": "https://greggfine.github.io/ear-trainer-2019",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/greggfine/ear-trainer-2019/issues"
+  },
+  "homepage": "https://github.com/greggfine/ear-trainer-2019#readme",
+  "dependencies": {
+    "gh-pages": "^2.0.1"
+  }
+}
