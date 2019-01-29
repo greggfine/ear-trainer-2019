@@ -437,7 +437,7 @@ function () {
         playBtn.disabled = true;
         var btn = document.createElement('button');
         btn.textContent = 'Play Again?';
-        btn.classList = 'btn btn-info';
+        btn.classList = 'btn btn-outline-success btn-lg';
         btn.addEventListener('click', function () {
           // CALL A 'RESET' FUNCTION HERE INSTEAD
           playBtn.disabled = false;
@@ -464,7 +464,7 @@ function () {
         playBtn.disabled = true;
         var btn = document.createElement('button');
         btn.textContent = 'Play Again?';
-        btn.classList = 'btn btn-info';
+        btn.classList = 'btn btn-outline-success btn-lg';
         btn.addEventListener('click', function () {
           playBtn.disabled = false;
           correctScoreStatus = 0;
