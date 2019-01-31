@@ -377,7 +377,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var mode = document.querySelector('#mode');
+var mode = document.querySelector('#mode-selector');
 var correct;
 var correctScoreStatus = 0;
 var wrongScoreStatus = 0;
@@ -573,7 +573,6 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-// import Reset from './Reset';
 var answerDisplay = document.querySelector('#answer-display');
 var chance = 0;
 var chanceDisplay = document.querySelector('#chance');
@@ -684,7 +683,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53428" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56155" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

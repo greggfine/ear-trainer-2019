@@ -1,6 +1,6 @@
 import Sound from './Sound';
 
-const mode = document.querySelector('#mode');
+const mode = document.querySelector('#mode-selector');
 
 var correct;
 var correctScoreStatus = 0;

@@ -6,7 +6,6 @@ import Guesses from './Guesses';
 import UserAnswer from './UserAnswer';
 import GainSlider from './GainSlider';
 import Mode from './Mode';
-// import Reset from './Reset';
 const answerDisplay = document.querySelector('#answer-display');
 var chance = 0;
 const chanceDisplay = document.querySelector('#chance');
